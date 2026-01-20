@@ -1,0 +1,23 @@
+.head {
+  text-align: center;
+  color: brown;
+}
+
+.lorem {
+  color: rgb(102, 226, 245);
+  text-align: center;
+}
+
+.delete {
+  background-color: antiquewhite;
+  color: rgb(240, 193, 63);
+  font-weight: 800;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 5px;
+  border-color: black;
+}
+
+.buttoncontainer {
+  display: flex;
+  justify-content: center;
+}
