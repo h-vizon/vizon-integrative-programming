@@ -11,13 +11,6 @@
   box-sizing: border-box; /* Ensures padding doesn't break layout */
 }
 
-/* OPTIONAL: If you have the real Nexokora font file in assets
-@font-face {
-    font-family: 'Nexokora';
-    src: url('assets/Nexokora.ttf') format('truetype');
-} 
-*/
-
 body {
   margin: 0;
   padding: 0;
@@ -42,6 +35,75 @@ body {
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
+}
+
+/* --- NAVIGATION BAR --- */
+.main-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 25px 0;
+  z-index: 1000;
+}
+
+.nav-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LOGO STYLE */
+.nav-logo {
+  font-family: "Nexokora", "Orbitron", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  flex: 1; /* left space */
+  text-align: left;
+}
+
+/* LINKS STYLE */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 50px; /* Space between words */
+  padding: 0;
+  margin: 0;
+  flex: 1; /* Takes up center space */
+  justify-content: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--lava-orange);
+  text-shadow: 0 0 15px var(--lava-orange);
+}
+
+.nav-spacer {
+  flex: 1; /* Takes up right space to balance the logo */
+}
+
+/* MOBILE NAV TWEAK */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  .nav-logo {
+    text-align: center;
+  }
 }
 
 /* --- HERO SECTION --- */
@@ -337,7 +399,7 @@ footer {
     margin: 20px auto;
     display: block;
     width: 60%;
-    animation: none; /* Disable float on mobile to save space */
+    animation: none;
   }
 
   .ui-element,
