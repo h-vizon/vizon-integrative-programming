@@ -21,9 +21,11 @@ The page is designed for tech-savvy athletes who appreciate both performance and
 
 ## 🔹 Features
 
-1. **Immersive Lava UI:** A custom gradient background and a futuristic hero section with soft glowing details.
-2. **Floating 3D Animations:** The main paddle gently floats using smooth CSS animations.
-3. **Responsive Product Grid:** A clean, modern grid layout that adapts well to both desktop and mobile screens.
+1. A custom gradient background and a futuristic hero section with soft glowing details.
+2. The main paddle gently floats using smooth CSS animations.
+3. A clean, modern grid layout that adapts well to both desktop and mobile screens.
+4. Multi-page navigation (Landing Page → Login → Signup)
+5. Consistent futuristic UI styling across all pages
 
 ## 🔹 AI Assistance Disclosure (Required)
 
@@ -40,3 +42,8 @@ The page is designed for tech-savvy athletes who appreciate both performance and
 ## 🔹 Learning Reflection
 
 From this activity, I learned how to use absolute positioning to build more complex interface elements, such as the power meters, within a relative container. The most challenging part was controlling the `z-index` layers so the floating paddle appeared above the glowing interface elements without covering the text. I addressed this by reorganizing the HTML structure, which allowed the layers to display correctly.
+
+## Pages Added
+
+- `login.html` – Login UI page for existing NEURON users
+- `signup.html` – Signup UI page for new NEURON accounts
