@@ -27,19 +27,15 @@ The page is designed for tech-savvy athletes who appreciate both performance and
 
 ## 🔹 AI Assistance Disclosure
 
-**Did you use AI tools?** Yes
+# Did you use AI tools? (Yes)
 
-**Tools Used:** ChatGPT (OpenAI) & Google Gemini
-
-**How they were used:**
-
-- I used ChatGPT to generate the concept art for the lava-themed paddles and the background pickleball elements.
-- I used Google Gemini to assist with structuring the semantic HTML and resolving specific CSS challenges, such as properly centering the navigation bar and creating the glowing “magma” text effects.
-- All code was reviewed, tested, and customized by me to fit the specific project requirements.
+# Tools Used: ChatGPT & Google Gemini
 
 ## 🔹 Learning Reflection
 
 From this activity, I learned how to use absolute positioning to build more complex interface elements, such as the power meters, within a relative container. The most challenging part was controlling the `z-index` layers so the floating paddle appeared above the glowing interface elements without covering the text. I addressed this by reorganizing the HTML structure, which allowed the layers to display correctly.
+
+---
 
 # ACTVITY 2 January 26,2026 D - 12:30 - 2:00 pm
 
