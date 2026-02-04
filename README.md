@@ -72,3 +72,39 @@ This activity helped me understand how to create and link multiple pages while m
 
 - `login.html` – Login UI page for existing NEURON users
 - `signup.html` – Signup UI page for new NEURON accounts
+
+---
+
+# ACTIVITY 3 February 4, 2026 D - 2:15 - 3:30 pm
+
+# Profile and Settings Page Linking
+
+# Description:
+
+This activity improves the NEURON: Lava Series website by adding **Profile** and **Settings** pages that are linked through the navigation bar. The Profile page displays user information and a personal info section, while the Settings page provides a static UI for changing account details. These additions make the website more interactive and give a dashboard-like experience for users.
+
+## 🔹 Features
+
+1. Separate Profile and Settings pages with structured sections.
+2. Navigation links allowing smooth transitions between Home, Login, Profile, and Settings pages.
+3. Consistent futuristic visual theme using Orbitron and Rajdhani fonts.
+4. Responsive layout suitable for different screen sizes.
+5. Profile page includes avatar, full name, email, address, and About Me section.
+6. Settings page includes visual form fields for email, address, password, theme option, and a save button.
+
+🔹 AI Assistance Disclosure (Required)
+
+# Did you use AI tools? (Yes)
+
+# AI Tools Used: ChatGPT & Google Gemini
+
+# 🔹 Learning Reflection
+
+This activity helped me understand how to create and link multiple pages in a dashboard-style layout while maintaining consistent design.
+The most challenging part was organizing the navigation and ensuring all links worked correctly on GitHub Pages.
+I also learned the importance of user flow and layout consistency for a professional-looking website.
+
+## Pages Added
+
+- `profile.html` – Profile page displaying user info and navigation links
+- `settings.html` – Settings page with static form for account updates
