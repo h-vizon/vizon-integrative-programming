@@ -520,3 +520,16 @@ footer {
   color: var(--lava-yellow);
   text-shadow: 0 0 10px var(--lava-orange);
 }
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* Makes it circular */
+  object-fit: cover; /* Prevents image stretching */
+  border: 3px solid #ff4d00; /* Lava orange border */
+  box-shadow: 0 0 20px rgba(255, 77, 0, 0.4); /* Neon glow effect */
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
