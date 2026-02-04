@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings | NEURON</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+
+        <ul class="nav-links">
+          <li><a href="profile.html">PROFILE</a></li>
+        </ul>
+
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <!-- SETTINGS SECTION -->
+    <section class="auth-section">
+      <div class="auth-box">
+        <h1 class="section-title">Settings</h1>
+
+        <!-- SETTINGS FORM (UI ONLY) -->
+        <form class="auth-form">
+          <input type="email" placeholder="Change Email" />
+          <input type="text" placeholder="Change Address" />
+          <input type="password" placeholder="Change Password" />
+
+          <select style="padding: 15px; font-family: Rajdhani">
+            <option>Theme: Lava (Default)</option>
+            <option>Theme: Dark</option>
+            <option>Theme: Neon</option>
+          </select>
+
+          <button type="submit" class="btn-lava">Save Settings</button>
+        </form>
+
+        <p class="auth-text">
+          <a href="profile.html">← Back to Profile</a>
+        </p>
+      </div>
+    </section>
+  </body>
+</html>
