@@ -87,7 +87,12 @@ function initLoginValidation() {
     if (valid) {
       showToast("✔ Login successful! Redirecting...", "success");
       setTimeout(() => {
-        window.location.href = "profile.html";
+        const role = sessionStorage.getItem("userRole");
+        if (role === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          window.location.href = "profile.html";
+        }
       }, 1500);
     }
   });
