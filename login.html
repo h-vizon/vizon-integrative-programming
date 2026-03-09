@@ -43,5 +43,21 @@
     </section>
 
     <script src="script.js"></script>
+    <script>
+      // Override login submit to support admin redirect
+      document.getElementById("login-form").addEventListener(
+        "submit",
+        function (e) {
+          // Admin shortcut: if email contains "admin", set role and redirect
+          const email = document.getElementById("login-email").value.trim();
+          if (email.toLowerCase().includes("admin")) {
+            sessionStorage.setItem("userRole", "admin");
+          } else {
+            sessionStorage.setItem("userRole", "user");
+          }
+        },
+        true,
+      ); // capture phase so it runs before script.js redirect
+    </script>
   </body>
 </html>
