@@ -535,252 +535,21 @@ footer {
 }
 
 /* ============================================================
-   CLIENT-SIDE VALIDATION STYLES
-   ============================================================ */
-
-/* Red border on invalid input */
-.auth-form input.input-error {
-  border-color: #ff0040;
-  box-shadow: 0 0 12px rgba(255, 0, 64, 0.4);
-}
-
-/* Error message text */
-.error-msg {
-  display: block;
-  color: #ff4466;
-  font-family: "Rajdhani", sans-serif;
-  font-size: 0.88rem;
-  text-align: left;
-  margin-top: -12px;
-  padding-left: 4px;
-  letter-spacing: 0.5px;
-  animation: fadeInErr 0.2s ease;
-}
-
-@keyframes fadeInErr {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Toast notification */
-.lava-toast {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%) translateY(30px);
-  background: rgba(0, 0, 0, 0.85);
-  border: 1px solid var(--lava-orange);
-  border-radius: 30px;
-  padding: 14px 32px;
-  color: #fff;
-  font-family: "Rajdhani", sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  box-shadow: 0 0 25px rgba(255, 78, 0, 0.5);
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-  z-index: 9999;
-}
-
-.lava-toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.lava-toast.success {
-  border-color: #00ff88;
-  box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
-  color: #00ff88;
-}
-
-.lava-toast.error {
-  border-color: #ff0040;
-  box-shadow: 0 0 25px rgba(255, 0, 64, 0.4);
-  color: #ff4466;
-}
-
-/* ============================================================
-   ADMIN PAGES STYLES
-   ============================================================ */
-
-/* Stat Cards */
-.admin-stat-card {
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 78, 0, 0.3);
-  border-top: 3px solid var(--lava-orange);
-  border-radius: 15px;
-  padding: 30px 20px;
-  text-align: center;
-  transition: 0.3s;
-}
-
-.admin-stat-card:hover {
-  border-color: var(--lava-orange);
-  box-shadow: 0 0 20px rgba(255, 78, 0, 0.3);
-  transform: translateY(-4px);
-}
-
-.stat-number {
-  font-family: "Orbitron", sans-serif;
-  font-size: 2.8rem;
-  font-weight: 900;
-  margin-bottom: 8px;
-}
-
-.stat-label {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 1rem;
-  color: #aaa;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-/* Admin Menu Cards */
-.admin-menu-card {
-  display: block;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 78, 0, 0.2);
-  border-radius: 15px;
-  padding: 30px 20px;
-  text-align: center;
-  text-decoration: none;
-  color: #ccc;
-  font-family: "Rajdhani", sans-serif;
-  transition: 0.3s;
-}
-
-.admin-menu-card:hover {
-  border-color: var(--lava-orange);
-  box-shadow: 0 0 25px rgba(255, 78, 0, 0.3);
-  transform: translateY(-5px);
-  color: #fff;
-}
-
-.admin-menu-card h3 {
-  font-family: "Orbitron", sans-serif;
-  font-size: 1rem;
-  margin: 10px 0 8px;
-}
-
-.admin-menu-icon {
-  font-size: 2rem;
-  margin-bottom: 5px;
-}
-
-/* Admin Table */
-.admin-table-wrapper {
-  overflow-x: auto;
-  border: 1px solid rgba(255, 78, 0, 0.3);
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: "Rajdhani", sans-serif;
-  font-size: 1rem;
-}
-
-.admin-table thead tr {
-  background: rgba(255, 78, 0, 0.15);
-  border-bottom: 2px solid var(--lava-orange);
-}
-
-.admin-table th {
-  padding: 15px 20px;
-  text-align: left;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--lava-orange);
-  font-size: 0.85rem;
-}
-
-.admin-table td {
-  padding: 14px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: #ddd;
-}
-
-.admin-table tbody tr:hover {
-  background: rgba(255, 78, 0, 0.05);
-}
-
-.admin-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* Role Badges */
-.role-badge {
-  display: inline-block;
-  padding: 3px 12px;
-  border-radius: 20px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.role-admin {
-  background: rgba(255, 78, 0, 0.2);
-  border: 1px solid var(--lava-orange);
-  color: var(--lava-orange);
-}
-
-.role-user {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #aaa;
-}
-
-/* Delete Button */
-.btn-delete {
-  background: rgba(255, 0, 64, 0.15);
-  border: 1px solid #ff0040;
-  color: #ff4466;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-family: "Rajdhani", sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-delete:hover {
-  background: rgba(255, 0, 64, 0.35);
-  box-shadow: 0 0 12px rgba(255, 0, 64, 0.4);
-  color: #fff;
-}
-
-/* ============================================================
    ADMIN DASHBOARD - SIDEBAR LAYOUT
    ============================================================ */
 
-/* Override body for admin pages */
-.admin-body {
-  display: flex;
+body.admin-body {
+  display: flex !important;
+  flex-direction: row !important;
   min-height: 100vh;
-  background: #0a0a0a;
-  padding: 0;
-  margin: 0;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* --- SIDEBAR --- */
 .admin-sidebar {
   width: 240px;
   min-height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.9);
   border-right: 1px solid rgba(255, 78, 0, 0.25);
   display: flex;
   flex-direction: column;
@@ -903,17 +672,14 @@ footer {
   color: #ff4466;
 }
 
-/* --- MAIN CONTENT AREA --- */
 .admin-main {
   margin-left: 240px;
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: transparent;
 }
 
-/* --- TOP BAR --- */
 .admin-topbar {
   display: flex;
   align-items: center;
@@ -943,7 +709,6 @@ footer {
   color: #666;
 }
 
-/* --- STAT CARDS ROW --- */
 .admin-stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -973,14 +738,8 @@ footer {
   background: rgba(255, 78, 0, 0.08);
 }
 
-.stat-icon {
-  font-size: 1.8rem;
-  flex-shrink: 0;
-}
-
-.stat-info {
-  flex: 1;
-}
+.stat-icon { font-size: 1.8rem; flex-shrink: 0; }
+.stat-info { flex: 1; }
 
 .admin-stat-card .stat-number {
   font-family: "Orbitron", sans-serif;
@@ -999,7 +758,6 @@ footer {
   letter-spacing: 1px;
 }
 
-/* --- PANELS ROW --- */
 .admin-panels {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -1035,26 +793,12 @@ footer {
   font-weight: 600;
 }
 
-.panel-link:hover {
-  color: var(--lava-yellow);
-}
-
-/* Table inside panel */
-.admin-panel .admin-table {
-  margin: 0;
-}
+.panel-link:hover { color: var(--lava-yellow); }
 
 .admin-panel .admin-table th,
-.admin-panel .admin-table td {
-  padding: 12px 22px;
-}
+.admin-panel .admin-table td { padding: 12px 22px; }
 
-/* Quick Actions */
-.quick-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
+.quick-actions { display: flex; flex-direction: column; }
 
 .quick-action-btn {
   display: flex;
@@ -1068,52 +812,20 @@ footer {
   transition: 0.2s;
 }
 
-.quick-action-btn:hover {
-  background: rgba(255, 78, 0, 0.08);
-  color: #fff;
-}
+.quick-action-btn:hover { background: rgba(255, 78, 0, 0.08); color: #fff; }
+.quick-action-btn span { font-size: 1.3rem; flex-shrink: 0; }
+.quick-action-btn div { font-size: 0.95rem; font-weight: 600; color: #ddd; }
+.quick-action-btn small { font-size: 0.78rem; color: #666; display: block; }
 
-.quick-action-btn span {
-  font-size: 1.3rem;
-  flex-shrink: 0;
-}
-
-.quick-action-btn div {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #ddd;
-}
-
-.quick-action-btn small {
-  font-size: 0.78rem;
-  color: #666;
-  display: block;
-}
-
-/* Responsive */
 @media (max-width: 900px) {
-  .admin-sidebar {
-    width: 200px;
-  }
-  .admin-main {
-    margin-left: 200px;
-  }
-  .admin-stats-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .admin-panels {
-    grid-template-columns: 1fr;
-  }
+  .admin-sidebar { width: 200px; }
+  .admin-main { margin-left: 200px; }
+  .admin-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .admin-panels { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
-  .admin-sidebar {
-    display: none;
-  }
-  .admin-main {
-    margin-left: 0;
-  }
-  .admin-stats-row {
-    grid-template-columns: 1fr 1fr;
-  }
+  .admin-sidebar { display: none; }
+  .admin-main { margin-left: 0; }
+  .admin-stats-row { grid-template-columns: 1fr 1fr; }
 }
