@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add User | NEURON Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+        <ul class="nav-links">
+          <li><a href="admin.html">DASHBOARD</a></li>
+          <li><a href="manage-users.html">MANAGE USERS</a></li>
+          <li><a href="login.html">LOGOUT</a></li>
+        </ul>
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <!-- ADD USER SECTION -->
+    <section class="auth-section">
+      <div class="auth-box" style="max-width: 480px">
+        <h1 class="section-title">Add User</h1>
+        <p style="font-family: Rajdhani; color: #aaa; margin-bottom: 20px">
+          Fill in the details to register a new user.
+        </p>
+
+        <form class="auth-form" id="add-user-form" novalidate>
+          <input type="text" id="add-name" placeholder="Full Name" />
+          <input type="email" id="add-email" placeholder="Email" />
+          <input type="password" id="add-password" placeholder="Password" />
+
+          <select
+            id="add-role"
+            style="
+              padding: 15px;
+              font-family: Rajdhani;
+              font-size: 1rem;
+              background: rgba(255, 255, 255, 0.05);
+              color: #fff;
+              border: 1px solid #333;
+              border-radius: 5px;
+              outline: none;
+            "
+          >
+            <option value="">Select Role</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          <button type="submit" class="btn-lava">Add User</button>
+        </form>
+
+        <!-- Preview of added users this session -->
+        <div id="added-users-list" style="margin-top: 30px; display: none">
+          <h3
+            class="highlight-lava"
+            style="margin-bottom: 10px; font-size: 1rem"
+          >
+            Recently Added
+          </h3>
+          <ul
+            id="added-list"
+            style="
+              list-style: none;
+              padding: 0;
+              font-family: Rajdhani;
+              color: #ccc;
+              text-align: left;
+            "
+          ></ul>
+        </div>
+
+        <p class="auth-text" style="margin-top: 20px">
+          <a href="manage-users.html">← Back to Manage Users</a>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <p>
+        NEURON: Lava Series &bull; Admin Panel &bull;
+        <strong>Hyacinth Faith Vizon</strong>
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // Admin access guard
+      const userRole = sessionStorage.getItem("userRole") || "admin";
+      if (userRole !== "admin") {
+        window.location.href = "login.html";
+      }
+
+      // Add User Form Validation
+      document
+        .getElementById("add-user-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          let valid = true;
+
+          const nameInput = document.getElementById("add-name");
+          const emailInput = document.getElementById("add-email");
+          const passwordInput = document.getElementById("add-password");
+          const roleSelect = document.getElementById("add-role");
+
+          const name = nameInput.value.trim();
+          const email = emailInput.value.trim();
+          const password = passwordInput.value;
+          const role = roleSelect.value;
+
+          // Name
+          if (!name) {
+            showError(nameInput, "⚠ Full name is required.");
+            valid = false;
+          } else if (name.length < 2) {
+            showError(nameInput, "⚠ Name must be at least 2 characters.");
+            valid = false;
+          } else {
+            clearError(nameInput);
+          }
+
+          // Email
+          if (!email) {
+            showError(emailInput, "⚠ Email is required.");
+            valid = false;
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showError(emailInput, "⚠ Please enter a valid email address.");
+            valid = false;
+          } else {
+            clearError(emailInput);
+          }
+
+          // Password
+          if (!password) {
+            showError(passwordInput, "⚠ Password is required.");
+            valid = false;
+          } else if (password.length < 6) {
+            showError(
+              passwordInput,
+              "⚠ Password must be at least 6 characters.",
+            );
+            valid = false;
+          } else {
+            clearError(passwordInput);
+          }
+
+          // Role
+          if (!role) {
+            showToast("⚠ Please select a role.", "error");
+            valid = false;
+          }
+
+          if (valid) {
+            // Simulate adding user
+            const list = document.getElementById("added-list");
+            const wrapper = document.getElementById("added-users-list");
+            const li = document.createElement("li");
+            li.style.padding = "6px 0";
+            li.style.borderBottom = "1px solid rgba(255,78,0,0.15)";
+            li.innerHTML = `<span style="color:var(--lava-orange)">✔</span> <strong>${name}</strong> — ${email} <span style="color:#888">(${role})</span>`;
+            list.appendChild(li);
+            wrapper.style.display = "block";
+
+            // Reset form
+            this.reset();
+            showToast(`✔ User "${name}" added successfully!`, "success");
+          }
+        });
+
+      // Live clear errors
+      ["add-name", "add-email", "add-password"].forEach((id) => {
+        document.getElementById(id).addEventListener("input", function () {
+          if (this.value.trim()) clearError(this);
+        });
+      });
+    </script>
+  </body>
+</html>
