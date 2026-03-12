@@ -114,3 +114,69 @@ I also learned the importance of user flow and layout consistency for a professi
 # ACTIVITY 4 March 4, 2026 D - 2:15 - 3:30 pm
 
 # Client-side Validation Rule
+
+Description:
+This activity extends the NEURON: Lava Series website by implementing client-side form validation using JavaScript. A new script.js file was added to validate all interactive forms across the site — Login, Sign Up, and Settings. Validation runs on form submission and provides real-time inline feedback with styled error messages and a toast notification on success.
+
+🔹 Features
+
+1. Login form validates that email is properly formatted and password is at least 6 characters.
+2. Sign Up form validates full name length, email format, password strength (uppercase + number required), and matching confirm password.
+3. Settings form validates optional email and password fields only when filled in, including a confirm password match check.
+4. Inline error messages appear beneath each invalid field with a fade-in animation.
+5. A lava-themed toast notification confirms success on valid submission.
+
+🔹 AI Assistance Disclosure (Required)
+Did you use AI tools? (Yes)
+AI Tools Used: Claude (Anthropic)
+How they were used:
+I used Claude to help generate the JavaScript validation logic in script.js and the corresponding CSS styles for error states and toast notifications.
+
+🔹 Learning Reflection
+This activity helped me understand how JavaScript interacts with the DOM to validate user input before a form is submitted. The most challenging part was handling the Settings form, where fields are optional but still need to be validated when filled. I also learned how to provide clear, accessible feedback to users through inline error messages and visual state changes.
+Files Modified
+
+## Pages Added
+
+1. script.js — New file containing all client-side validation logic
+2. login.html — Added id attributes and novalidate, linked script.js
+3. signup.html — Added id attributes and novalidate, linked script.js
+4. settings.html — Added id attributes, confirm password field, and linked script.js
+5. style.css — Added styles for .input-error, .error-msg, and .lava-toast
+
+---
+
+# ACTIVITY 5 March 9, 2026 D - 2:15 - 3:30 pm
+
+# Client-side Admin Pages
+
+Description:
+This activity extends the NEURON: Lava Series website by implementing a basic admin interface using HTML, CSS, and JavaScript. Three new admin pages were added: a dashboard, a user management table, and an add user form. Admin pages are protected by a role check — if the logged-in user is an admin (detected via email containing "admin"), they are redirected to the Admin Dashboard after login.
+
+🔹 Features
+
+1. Admin Dashboard (admin.html) with stat cards (Total Users, Active Sessions, Admins) and quick navigation links.
+   Manage Users page (manage-users.html) with a styled data table showing ID, Name, Email, Role, and a working Delete button.
+2. Add User form (add-user.html) with full client-side validation for Name, Email, Password, and Role fields.
+   Admin access guard on all admin pages — redirects to login if role is not admin.
+3. Login page updated to detect admin role and redirect accordingly.
+
+🔹 AI Assistance Disclosure (Required)
+Did you use AI tools? (Yes)
+AI Tools Used: Claude (Anthropic)
+How they were used:
+I used Claude to help generate the HTML structure, CSS styling, and JavaScript logic for the admin pages. All pages were reviewed and tested by me to ensure they matched the existing design system and activity requirements.
+
+🔹 Learning Reflection
+This activity introduced me to the concept of role-based access control in web applications. The most challenging part was connecting the login role detection to the admin page guard using sessionStorage. I also learned how to build a CRUD-style interface with a data table and delete functionality using JavaScript DOM manipulation.
+Pages Added
+
+## Pages Added
+
+1. admin.html — Admin Dashboard with stats and navigation
+2. manage-users.html — User table with delete functionality
+3. add-user.html — Add user form with client-side validation
+
+---
+#   P r o j e c t - 1  
+ 

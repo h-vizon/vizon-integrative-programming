@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Users | NEURON Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+        <ul class="nav-links">
+          <li><a href="admin.html">DASHBOARD</a></li>
+          <li><a href="add-user.html">ADD USER</a></li>
+          <li><a href="login.html">LOGOUT</a></li>
+        </ul>
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <!-- MANAGE USERS SECTION -->
+    <section
+      class="auth-section"
+      style="align-items: flex-start; padding-top: 120px"
+    >
+      <div
+        class="container"
+        style="width: 100%; max-width: 900px; margin: 0 auto"
+      >
+        <div style="text-align: center; margin-bottom: 40px">
+          <h1 class="section-title">Manage Users</h1>
+          <p style="font-family: Rajdhani; color: #ffdcb3">
+            View and manage all registered users in the system.
+          </p>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table" id="users-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr data-id="1">
+                <td>1</td>
+                <td>Hyacinth Vizon</td>
+                <td>hyafaithv@gmail.com</td>
+                <td><span class="role-badge role-admin">Admin</span></td>
+                <td>
+                  <button class="btn-delete" onclick="deleteUser(this)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <tr data-id="2">
+                <td>2</td>
+                <td>Ana Reyes</td>
+                <td>ana@email.com</td>
+                <td><span class="role-badge role-user">User</span></td>
+                <td>
+                  <button class="btn-delete" onclick="deleteUser(this)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <tr data-id="3">
+                <td>3</td>
+                <td>Juan dela Cruz</td>
+                <td>juan@email.com</td>
+                <td><span class="role-badge role-user">User</span></td>
+                <td>
+                  <button class="btn-delete" onclick="deleteUser(this)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p
+            id="no-users-msg"
+            style="
+              display: none;
+              text-align: center;
+              color: #888;
+              font-family: Rajdhani;
+              margin-top: 20px;
+            "
+          >
+            No users found.
+          </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px">
+          <a href="add-user.html" class="btn-lava">+ Add New User</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>
+        NEURON: Lava Series &bull; Admin Panel &bull;
+        <strong>Hyacinth Faith Vizon</strong>
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // Admin access guard
+      const userRole = sessionStorage.getItem("userRole") || "admin";
+      if (userRole !== "admin") {
+        window.location.href = "login.html";
+      }
+
+      function deleteUser(btn) {
+        const row = btn.closest("tr");
+        const name = row.cells[1].textContent;
+        if (confirm(`Are you sure you want to delete "${name}"?`)) {
+          row.style.transition = "opacity 0.4s";
+          row.style.opacity = "0";
+          setTimeout(() => {
+            row.remove();
+            checkEmpty();
+            showToast(`✔ "${name}" has been deleted.`, "success");
+          }, 400);
+        }
+      }
+
+      function checkEmpty() {
+        const rows = document.querySelectorAll("#users-tbody tr");
+        document.getElementById("no-users-msg").style.display =
+          rows.length === 0 ? "block" : "none";
+      }
+    </script>
+  </body>
+</html>
