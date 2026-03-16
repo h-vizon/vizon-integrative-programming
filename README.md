@@ -178,7 +178,36 @@ Pages Added
 3. add-user.html — Add user form with client-side validation
 
 ---
-#   P r o j e c t - 1  
- #   P r o j e c t - 1  
- #   P r o j e c t - 1  
- 
+# ACTIVITY 6 — March 16, 2026 -  D - 2:15 - 3:30 pm
+ 
+## Exploring API Integration in a Web Application
+
+ 
+## Description
+A weather app integrated into the NEURON: Lava Series website. The user enters a city name and the app fetches real-time weather data using the Open-Meteo API and displays it in the existing lava-themed interface.
+ 
+## API Used
+**Open-Meteo API** — A free, open-source weather API that requires no API key.
+- Geocoding endpoint: converts city names to latitude/longitude
+- Forecast endpoint: returns current weather and 7-day forecast data
+ 
+## Features
+1. City search with Enter key or button support
+2. Displays current temperature, weather condition, and emoji icon
+3. Shows wind speed, humidity, precipitation, feels-like temperature, UV index, and visibility
+4. 7-day forecast with daily high/low temperatures
+5. Full error handling for invalid city names and failed API requests
+6. Loading state animation while fetching data
+7. Consistent NEURON lava theme design
+ 
+## How to Use
+1. Open the live site and navigate to the **Weather** page
+2. Type a city name in the search box (e.g. Manila, Tokyo, New York)
+3. Press **SCAN** or hit **Enter**
+4. View the current weather and 7-day forecast
+ 
+## Challenges Encountered
+The Open-Meteo API does not accept city names directly — it requires latitude and longitude coordinates. To solve this, a two-step fetch process was used: first calling the Open-Meteo Geocoding API to convert the city name into coordinates, then passing those coordinates to the weather forecast API. Mapping WMO weather codes to readable descriptions and emojis also required building a custom lookup table.
+ 
+## Pages Added
+- `weather.html` — Weather app page with full API integration

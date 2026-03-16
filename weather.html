@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather | NEURON</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── Weather Page Specific Styles ── */
+      .weather-section {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .weather-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .weather-header p {
+        font-family: "Rajdhani", sans-serif;
+        color: #ffdcb3;
+        font-size: 1.1rem;
+        margin-top: 8px;
+      }
+
+      /* Search Bar */
+      .weather-search {
+        display: flex;
+        gap: 12px;
+        width: 100%;
+        max-width: 560px;
+        margin-bottom: 40px;
+      }
+
+      .weather-search input {
+        flex: 1;
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 78, 0, 0.4);
+        border-radius: 30px;
+        color: #fff;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1.05rem;
+        outline: none;
+        transition: 0.3s;
+      }
+
+      .weather-search input::placeholder {
+        color: #888;
+      }
+
+      .weather-search input:focus {
+        border-color: var(--lava-orange);
+        box-shadow: 0 0 20px rgba(255, 78, 0, 0.3);
+      }
+
+      .weather-search button {
+        padding: 15px 28px;
+        background: linear-gradient(90deg, #ff4e00, #ff0040);
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(255, 78, 0, 0.4);
+        transition: 0.3s;
+        white-space: nowrap;
+      }
+
+      .weather-search button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 35px var(--lava-orange);
+      }
+
+      /* Loading State */
+      .weather-loading {
+        display: none;
+        font-family: "Rajdhani", sans-serif;
+        color: var(--lava-orange);
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: pulse 1.2s ease-in-out infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.3; }
+      }
+
+      /* Error Message */
+      .weather-error {
+        display: none;
+        background: rgba(255, 0, 64, 0.1);
+        border: 1px solid #ff0040;
+        border-radius: 12px;
+        padding: 16px 28px;
+        font-family: "Rajdhani", sans-serif;
+        color: #ff4466;
+        font-size: 1rem;
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      /* Main Weather Card */
+      .weather-card {
+        display: none;
+        width: 100%;
+        max-width: 700px;
+        background: rgba(0, 0, 0, 0.65);
+        border: 1px solid rgba(255, 78, 0, 0.3);
+        border-top: 3px solid var(--lava-orange);
+        border-radius: 20px;
+        padding: 35px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 40px rgba(255, 78, 0, 0.15);
+        animation: fadeUp 0.4s ease;
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* City & Date */
+      .weather-city {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 4px;
+      }
+
+      .weather-date {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.95rem;
+        color: #888;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+      }
+
+      /* Current Weather Row */
+      .weather-current {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 78, 0, 0.15);
+      }
+
+      .weather-emoji {
+        font-size: 5rem;
+        line-height: 1;
+        filter: drop-shadow(0 0 15px rgba(255, 78, 0, 0.4));
+      }
+
+      .weather-temp {
+        font-family: "Orbitron", sans-serif;
+        font-size: 4rem;
+        font-weight: 900;
+        color: var(--lava-orange);
+        line-height: 1;
+        text-shadow: 0 0 20px rgba(255, 78, 0, 0.5);
+      }
+
+      .weather-desc {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1.2rem;
+        color: #ccc;
+        margin-top: 6px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Stats Grid */
+      .weather-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 30px;
+      }
+
+      .weather-stat {
+        background: rgba(255, 78, 0, 0.06);
+        border: 1px solid rgba(255, 78, 0, 0.15);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        transition: 0.3s;
+      }
+
+      .weather-stat:hover {
+        border-color: var(--lava-orange);
+        box-shadow: 0 0 15px rgba(255, 78, 0, 0.2);
+      }
+
+      .stat-icon-w {
+        font-size: 1.5rem;
+        margin-bottom: 6px;
+      }
+
+      .stat-val {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 3px;
+      }
+
+      .stat-lbl {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.78rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* 7-Day Forecast */
+      .forecast-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.85rem;
+        color: var(--lava-orange);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+
+      .forecast-row {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+      }
+
+      .forecast-day {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 78, 0, 0.1);
+        border-radius: 10px;
+        padding: 12px 6px;
+        text-align: center;
+        transition: 0.3s;
+      }
+
+      .forecast-day:hover {
+        border-color: var(--lava-orange);
+        background: rgba(255, 78, 0, 0.08);
+      }
+
+      .forecast-day-name {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.75rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+      }
+
+      .forecast-emoji { font-size: 1.4rem; margin-bottom: 6px; }
+
+      .forecast-max {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .forecast-min {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.75rem;
+        color: #666;
+        margin-top: 2px;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .weather-stats      { grid-template-columns: repeat(2, 1fr); }
+        .forecast-row       { grid-template-columns: repeat(4, 1fr); }
+        .weather-temp       { font-size: 2.8rem; }
+        .weather-emoji      { font-size: 3.5rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+        <ul class="nav-links">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="login.html">LOGIN</a></li>
+          <li><a href="weather.html" style="color: var(--lava-orange);">WEATHER</a></li>
+        </ul>
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <!-- WEATHER SECTION -->
+    <section class="weather-section">
+
+      <div class="weather-header">
+        <h1 class="section-title">Weather Scanner</h1>
+        <p>Enter a city to get real-time atmospheric data.</p>
+      </div>
+
+      <!-- Search -->
+      <div class="weather-search">
+        <input
+          type="text"
+          id="city-input"
+          placeholder="Enter city name (e.g. Manila, Tokyo...)"
+          autocomplete="off"
+        />
+        <button id="search-btn" onclick="getWeather()">SCAN</button>
+      </div>
+
+      <!-- Loading -->
+      <div class="weather-loading" id="loading">⚡ Scanning atmosphere...</div>
+
+      <!-- Error -->
+      <div class="weather-error" id="error-box">
+        ⚠ City not found. Please check the spelling and try again.
+      </div>
+
+      <!-- Weather Card -->
+      <div class="weather-card" id="weather-card">
+
+        <div class="weather-city"  id="w-city">—</div>
+        <div class="weather-date"  id="w-date">—</div>
+
+        <div class="weather-current">
+          <div class="weather-emoji" id="w-emoji">🌡</div>
+          <div>
+            <div class="weather-temp" id="w-temp">—</div>
+            <div class="weather-desc" id="w-desc">—</div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="weather-stats">
+          <div class="weather-stat">
+            <div class="stat-icon-w">💨</div>
+            <div class="stat-val" id="w-wind">—</div>
+            <div class="stat-lbl">Wind Speed</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">💧</div>
+            <div class="stat-val" id="w-humidity">—</div>
+            <div class="stat-lbl">Humidity</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">🌧</div>
+            <div class="stat-val" id="w-rain">—</div>
+            <div class="stat-lbl">Precipitation</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">🌡</div>
+            <div class="stat-val" id="w-feels">—</div>
+            <div class="stat-lbl">Feels Like</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">🔆</div>
+            <div class="stat-val" id="w-uv">—</div>
+            <div class="stat-lbl">UV Index</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">👁</div>
+            <div class="stat-val" id="w-vis">—</div>
+            <div class="stat-lbl">Visibility</div>
+          </div>
+        </div>
+
+        <!-- 7-Day Forecast -->
+        <div class="forecast-title">7-Day Forecast</div>
+        <div class="forecast-row" id="forecast-row"></div>
+
+      </div>
+    </section>
+
+    <footer>
+      <p>NEURON: Lava Series &bull; Weather Scanner &bull; Powered by <strong>Open-Meteo API</strong></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // ── WMO Weather Code → Description + Emoji ──
+      function getWeatherInfo(code) {
+        const map = {
+          0:  { desc: "Clear Sky",          emoji: "☀️"  },
+          1:  { desc: "Mainly Clear",        emoji: "🌤"  },
+          2:  { desc: "Partly Cloudy",       emoji: "⛅"  },
+          3:  { desc: "Overcast",            emoji: "☁️"  },
+          45: { desc: "Foggy",               emoji: "🌫"  },
+          48: { desc: "Icy Fog",             emoji: "🌫"  },
+          51: { desc: "Light Drizzle",       emoji: "🌦"  },
+          53: { desc: "Drizzle",             emoji: "🌦"  },
+          55: { desc: "Heavy Drizzle",       emoji: "🌧"  },
+          61: { desc: "Light Rain",          emoji: "🌧"  },
+          63: { desc: "Rain",                emoji: "🌧"  },
+          65: { desc: "Heavy Rain",          emoji: "🌧"  },
+          71: { desc: "Light Snow",          emoji: "🌨"  },
+          73: { desc: "Snow",                emoji: "❄️"  },
+          75: { desc: "Heavy Snow",          emoji: "❄️"  },
+          80: { desc: "Rain Showers",        emoji: "🌦"  },
+          81: { desc: "Heavy Showers",       emoji: "⛈"  },
+          82: { desc: "Violent Showers",     emoji: "⛈"  },
+          95: { desc: "Thunderstorm",        emoji: "⛈"  },
+          99: { desc: "Hail Thunderstorm",   emoji: "🌩"  },
+        };
+        return map[code] || { desc: "Unknown", emoji: "🌡" };
+      }
+
+      // ── Day Name from Date String ──
+      function getDayName(dateStr) {
+        const days = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+        return days[new Date(dateStr).getDay()];
+      }
+
+      // ── Main Function ──
+      async function getWeather() {
+        const city    = document.getElementById("city-input").value.trim();
+        const loading = document.getElementById("loading");
+        const errBox  = document.getElementById("error-box");
+        const card    = document.getElementById("weather-card");
+
+        // Reset UI
+        errBox.style.display = "none";
+        card.style.display   = "none";
+
+        if (!city) {
+          errBox.textContent   = "⚠ Please enter a city name.";
+          errBox.style.display = "block";
+          return;
+        }
+
+        loading.style.display = "block";
+
+        try {
+          // Step 1: Geocoding — city name → lat/lon
+          const geoRes = await fetch(
+            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`
+          );
+          const geoData = await geoRes.json();
+
+          if (!geoData.results || geoData.results.length === 0) {
+            throw new Error("City not found");
+          }
+
+          const { latitude, longitude, name, country } = geoData.results[0];
+
+          // Step 2: Weather data
+          const weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}` +
+            `&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code,visibility` +
+            `&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max` +
+            `&timezone=auto&forecast_days=7`
+          );
+          const wData = await weatherRes.json();
+
+          const cur     = wData.current;
+          const daily   = wData.daily;
+          const info    = getWeatherInfo(cur.weather_code);
+
+          // Populate card
+          document.getElementById("w-city").textContent    = `${name}, ${country}`;
+          document.getElementById("w-date").textContent    = new Date(cur.time).toLocaleDateString("en-US", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+          document.getElementById("w-emoji").textContent   = info.emoji;
+          document.getElementById("w-temp").textContent    = `${Math.round(cur.temperature_2m)}°C`;
+          document.getElementById("w-desc").textContent    = info.desc;
+          document.getElementById("w-wind").textContent    = `${cur.wind_speed_10m} km/h`;
+          document.getElementById("w-humidity").textContent= `${cur.relative_humidity_2m}%`;
+          document.getElementById("w-rain").textContent    = `${cur.precipitation} mm`;
+          document.getElementById("w-feels").textContent   = `${Math.round(cur.apparent_temperature)}°C`;
+          document.getElementById("w-uv").textContent      = daily.uv_index_max[0] ?? "—";
+          document.getElementById("w-vis").textContent     = cur.visibility
+            ? `${(cur.visibility / 1000).toFixed(1)} km`
+            : "—";
+
+          // 7-Day Forecast
+          const forecastRow = document.getElementById("forecast-row");
+          forecastRow.innerHTML = "";
+          for (let i = 0; i < 7; i++) {
+            const dayInfo = getWeatherInfo(daily.weather_code[i]);
+            forecastRow.innerHTML += `
+              <div class="forecast-day">
+                <div class="forecast-day-name">${getDayName(daily.time[i])}</div>
+                <div class="forecast-emoji">${dayInfo.emoji}</div>
+                <div class="forecast-max">${Math.round(daily.temperature_2m_max[i])}°</div>
+                <div class="forecast-min">${Math.round(daily.temperature_2m_min[i])}°</div>
+              </div>`;
+          }
+
+          loading.style.display = "none";
+          card.style.display    = "block";
+
+        } catch (err) {
+          loading.style.display = "none";
+          errBox.textContent    = err.message === "City not found"
+            ? "⚠ City not found. Please check the spelling and try again."
+            : "⚠ Failed to fetch weather data. Please try again later.";
+          errBox.style.display  = "block";
+        }
+      }
+
+      // Allow pressing Enter to search
+      document.getElementById("city-input").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") getWeather();
+      });
+    </script>
+  </body>
+</html>
