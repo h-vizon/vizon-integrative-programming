@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saved Weather | NEURON</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .saved-section {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .saved-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .saved-header p {
+        font-family: "Rajdhani", sans-serif;
+        color: #ffdcb3;
+        font-size: 1.1rem;
+        margin-top: 8px;
+      }
+
+      /* Empty State */
+      .saved-empty {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 40px;
+        font-family: "Rajdhani", sans-serif;
+        color: #555;
+        font-size: 1.1rem;
+        text-align: center;
+      }
+
+      .saved-empty span { font-size: 3rem; }
+
+      .saved-empty a {
+        color: var(--lava-orange);
+        text-decoration: none;
+        font-weight: 600;
+        border: 1px solid rgba(255,78,0,0.4);
+        padding: 10px 24px;
+        border-radius: 30px;
+        transition: 0.3s;
+      }
+
+      .saved-empty a:hover {
+        background: rgba(255,78,0,0.1);
+        box-shadow: 0 0 15px rgba(255,78,0,0.3);
+      }
+
+      /* Grid of saved cards */
+      .saved-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 900px;
+      }
+
+      .saved-card {
+        background: rgba(0,0,0,0.65);
+        border: 1px solid rgba(255,78,0,0.25);
+        border-top: 3px solid var(--lava-orange);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        animation: fadeUp 0.3s ease;
+        transition: 0.3s;
+      }
+
+      .saved-card:hover {
+        border-color: var(--lava-orange);
+        box-shadow: 0 0 25px rgba(255,78,0,0.2);
+        transform: translateY(-3px);
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .saved-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .saved-card-emoji { font-size: 2.5rem; }
+
+      .saved-card-temp {
+        font-family: "Orbitron", sans-serif;
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--lava-orange);
+        text-shadow: 0 0 10px rgba(255,78,0,0.4);
+      }
+
+      .saved-card-city {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .saved-card-desc {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.9rem;
+        color: #aaa;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .saved-card-meta {
+        display: flex;
+        gap: 16px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.85rem;
+        color: #666;
+        border-top: 1px solid rgba(255,78,0,0.1);
+        padding-top: 10px;
+      }
+
+      .saved-card-date {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.78rem;
+        color: #555;
+      }
+
+      .btn-remove {
+        background: transparent;
+        border: 1px solid rgba(255,0,64,0.4);
+        color: #ff4466;
+        padding: 7px 16px;
+        border-radius: 20px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 4px;
+        align-self: flex-start;
+      }
+
+      .btn-remove:hover {
+        background: rgba(255,0,64,0.15);
+        box-shadow: 0 0 12px rgba(255,0,64,0.3);
+      }
+
+      .saved-actions {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .btn-clear-all {
+        background: transparent;
+        border: 1px solid rgba(255,0,64,0.4);
+        color: #ff4466;
+        padding: 10px 24px;
+        border-radius: 30px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-clear-all:hover {
+        background: rgba(255,0,64,0.1);
+        box-shadow: 0 0 15px rgba(255,0,64,0.3);
+      }
+
+      @media (max-width: 600px) {
+        .saved-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+        <ul class="nav-links">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="weather.html">WEATHER</a></li>
+          <li><a href="saved-weather.html" style="color: var(--lava-orange);">SAVED</a></li>
+        </ul>
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <!-- SAVED SECTION -->
+    <section class="saved-section">
+
+      <div class="saved-header">
+        <h1 class="section-title">Saved Cities</h1>
+        <p>Your saved weather data — persisted in localStorage.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="saved-actions">
+        <a href="weather.html" class="btn-lava" style="font-size:0.8rem; padding: 12px 28px;">
+          + Search New City
+        </a>
+        <button class="btn-clear-all" onclick="clearAll()">🗑 Clear All</button>
+      </div>
+
+      <!-- Empty State -->
+      <div class="saved-empty" id="empty-state">
+        <span>🌍</span>
+        <p>No saved cities yet.</p>
+        <a href="weather.html">Search a city to save it</a>
+      </div>
+
+      <!-- Saved Cards Grid -->
+      <div class="saved-grid" id="saved-grid"></div>
+
+    </section>
+
+    <footer>
+      <p>NEURON: Lava Series &bull; Saved Weather &bull; Powered by <strong>Open-Meteo API</strong></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // ── Load and Render Saved Items ──
+      function renderSaved() {
+        const saved = JSON.parse(localStorage.getItem("savedWeather") || "[]");
+        const grid  = document.getElementById("saved-grid");
+        const empty = document.getElementById("empty-state");
+
+        grid.innerHTML = "";
+
+        if (saved.length === 0) {
+          empty.style.display = "flex";
+          return;
+        }
+
+        empty.style.display = "none";
+
+        saved.forEach((item, index) => {
+          grid.innerHTML += `
+            <div class="saved-card" id="card-${index}">
+              <div class="saved-card-top">
+                <div class="saved-card-emoji">${item.emoji}</div>
+                <div class="saved-card-temp">${item.temp}</div>
+              </div>
+              <div class="saved-card-city">${item.city}</div>
+              <div class="saved-card-desc">${item.desc}</div>
+              <div class="saved-card-meta">
+                <span>💨 ${item.wind}</span>
+                <span>💧 ${item.humidity}</span>
+              </div>
+              <div class="saved-card-date">Saved on: ${item.date}</div>
+              <button class="btn-remove" onclick="removeItem(${index})">🗑 Remove</button>
+            </div>`;
+        });
+      }
+
+      // ── Remove Single Item ──
+      function removeItem(index) {
+        const saved = JSON.parse(localStorage.getItem("savedWeather") || "[]");
+        const removed = saved[index].city;
+        saved.splice(index, 1);
+        localStorage.setItem("savedWeather", JSON.stringify(saved));
+        showToast(`✔ "${removed}" removed.`, "success");
+        renderSaved();
+      }
+
+      // ── Clear All ──
+      function clearAll() {
+        if (confirm("Are you sure you want to remove all saved cities?")) {
+          localStorage.removeItem("savedWeather");
+          showToast("✔ All saved cities cleared.", "success");
+          renderSaved();
+        }
+      }
+
+      // ── Init ──
+      renderSaved();
+    </script>
+  </body>
+</html>

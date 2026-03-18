@@ -286,6 +286,47 @@
         margin-top: 2px;
       }
 
+      /* Save Button */
+      .btn-save {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        margin-top: 24px;
+        padding: 14px;
+        background: transparent;
+        border: 1px solid rgba(255, 78, 0, 0.5);
+        border-radius: 12px;
+        color: var(--lava-orange);
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .btn-save:hover {
+        background: rgba(255, 78, 0, 0.12);
+        box-shadow: 0 0 20px rgba(255, 78, 0, 0.3);
+        border-color: var(--lava-orange);
+      }
+      .btn-save.saved {
+        border-color: #00ff88;
+        color: #00ff88;
+        background: rgba(0, 255, 136, 0.06);
+        pointer-events: none;
+      }
+      .view-saved-link {
+        margin-top: 14px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.95rem;
+        color: #888;
+        text-align: center;
+      }
+      .view-saved-link a { color: var(--lava-orange); text-decoration: none; font-weight: 600; }
+      .view-saved-link a:hover { color: var(--lava-yellow); }
+
       /* Responsive */
       @media (max-width: 600px) {
         .weather-stats      { grid-template-columns: repeat(2, 1fr); }
@@ -388,6 +429,14 @@
         <!-- 7-Day Forecast -->
         <div class="forecast-title">7-Day Forecast</div>
         <div class="forecast-row" id="forecast-row"></div>
+
+        <!-- Save Button -->
+        <button class="btn-save" id="save-btn" onclick="saveWeather()">
+          💾 SAVE WEATHER
+        </button>
+        <div class="view-saved-link">
+          <a href="saved-weather.html">📋 View Saved Cities →</a>
+        </div>
 
       </div>
     </section>
@@ -508,6 +557,11 @@
           loading.style.display = "none";
           card.style.display    = "block";
 
+          // Reset save button for new city
+          const btn = document.getElementById("save-btn");
+          btn.textContent = "💾 SAVE WEATHER";
+          btn.classList.remove("saved");
+
         } catch (err) {
           loading.style.display = "none";
           errBox.textContent    = err.message === "City not found"
@@ -517,10 +571,47 @@
         }
       }
 
+      // ── Save Weather to localStorage ──
+      function saveWeather() {
+        const city = document.getElementById("w-city").textContent;
+        const temp = document.getElementById("w-temp").textContent;
+        const desc = document.getElementById("w-desc").textContent;
+        const emoji = document.getElementById("w-emoji").textContent;
+        const wind = document.getElementById("w-wind").textContent;
+        const humidity = document.getElementById("w-humidity").textContent;
+        const date = new Date().toLocaleDateString("en-US", { weekday:"short", year:"numeric", month:"short", day:"numeric" });
+
+        if (!city || city === "—") return;
+
+        // Get existing saved items
+        const saved = JSON.parse(localStorage.getItem("savedWeather") || "[]");
+
+        // Prevent duplicates by city name
+        const alreadySaved = saved.some(item => item.city === city);
+        if (alreadySaved) {
+          showToast("⚠ " + city + " is already saved!", "error");
+          return;
+        }
+
+        // Add new entry
+        saved.push({ city, temp, desc, emoji, wind, humidity, date });
+        localStorage.setItem("savedWeather", JSON.stringify(saved));
+
+        // Update button
+        const btn = document.getElementById("save-btn");
+        btn.textContent = "✔ SAVED!";
+        btn.classList.add("saved");
+
+        showToast("✔ " + city + " saved successfully!", "success");
+      }
+
       // Allow pressing Enter to search
       document.getElementById("city-input").addEventListener("keydown", function (e) {
         if (e.key === "Enter") getWeather();
       });
+
+      // Reset save button when new search happens
+      const origGetWeather = getWeather;
     </script>
   </body>
 </html>
