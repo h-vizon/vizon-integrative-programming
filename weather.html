@@ -327,6 +327,9 @@
       .view-saved-link a { color: var(--lava-orange); text-decoration: none; font-weight: 600; }
       .view-saved-link a:hover { color: var(--lava-yellow); }
 
+      /* Air Quality Card hidden by default */
+      #aqi-card { display: none; }
+
       /* Responsive */
       @media (max-width: 600px) {
         .weather-stats      { grid-template-columns: repeat(2, 1fr); }
@@ -439,10 +442,51 @@
         </div>
 
       </div>
+
+      <!-- Air Quality Card -->
+      <div class="weather-card" id="aqi-card" style="margin-top: 20px;">
+        <div class="forecast-title" style="margin-bottom: 20px;">🌬 Air Quality Index</div>
+        <p style="font-family: Rajdhani; color: #ffdcb3; font-size: 0.95rem; margin-bottom: 20px;">
+          Powered by <strong>Open-Meteo Air Quality API</strong> — outdoor play conditions for pickleball athletes.
+        </p>
+        <div class="weather-stats">
+          <div class="weather-stat">
+            <div class="stat-icon-w">🌫</div>
+            <div class="stat-val" id="aqi-pm25">—</div>
+            <div class="stat-lbl">PM2.5 (μg/m³)</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">💨</div>
+            <div class="stat-val" id="aqi-pm10">—</div>
+            <div class="stat-lbl">PM10 (μg/m³)</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">☁️</div>
+            <div class="stat-val" id="aqi-co">—</div>
+            <div class="stat-lbl">CO (μg/m³)</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">🌿</div>
+            <div class="stat-val" id="aqi-dust">—</div>
+            <div class="stat-lbl">Dust (μg/m³)</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">🤧</div>
+            <div class="stat-val" id="aqi-pollen">—</div>
+            <div class="stat-lbl">Grass Pollen</div>
+          </div>
+          <div class="weather-stat">
+            <div class="stat-icon-w">✅</div>
+            <div class="stat-val" id="aqi-status" style="font-size: 0.85rem;">—</div>
+            <div class="stat-lbl">Play Status</div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <footer>
-      <p>NEURON: Lava Series &bull; Weather Scanner &bull; Powered by <strong>Open-Meteo API</strong></p>
+      <p>NEURON: Lava Series &bull; Weather Scanner &bull; Powered by <strong>Open-Meteo Weather API & Air Quality API</strong></p>
     </footer>
 
     <script src="script.js"></script>
@@ -557,6 +601,9 @@
           loading.style.display = "none";
           card.style.display    = "block";
 
+          // Fetch Air Quality data
+          fetchAirQuality(latitude, longitude);
+
           // Reset save button for new city
           const btn = document.getElementById("save-btn");
           btn.textContent = "💾 SAVE WEATHER";
@@ -603,6 +650,43 @@
         btn.classList.add("saved");
 
         showToast("✔ " + city + " saved successfully!", "success");
+      }
+
+      // ── Fetch Air Quality from Open-Meteo Air Quality API ──
+      async function fetchAirQuality(lat, lon) {
+        try {
+          const aqRes = await fetch(
+            "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=" + lat +
+            "&longitude=" + lon +
+            "&current=pm2_5,pm10,carbon_monoxide,dust,grass_pollen"
+          );
+          const aqData = await aqRes.json();
+          const aq = aqData.current;
+
+          const pm25  = aq.pm2_5 !== undefined ? aq.pm2_5.toFixed(1) : "—";
+          const pm10  = aq.pm10  !== undefined ? aq.pm10.toFixed(1)  : "—";
+          const co    = aq.carbon_monoxide !== undefined ? aq.carbon_monoxide.toFixed(1) : "—";
+          const dust  = aq.dust  !== undefined ? aq.dust.toFixed(1)  : "—";
+          const pollen = aq.grass_pollen !== undefined ? aq.grass_pollen.toFixed(1) : "—";
+
+          // Play status based on PM2.5
+          let status = "✅ Good";
+          if (aq.pm2_5 > 55)      status = "❌ Unhealthy";
+          else if (aq.pm2_5 > 35) status = "⚠ Moderate";
+          else if (aq.pm2_5 > 12) status = "🟡 Fair";
+
+          document.getElementById("aqi-pm25").textContent  = pm25;
+          document.getElementById("aqi-pm10").textContent  = pm10;
+          document.getElementById("aqi-co").textContent    = co;
+          document.getElementById("aqi-dust").textContent  = dust;
+          document.getElementById("aqi-pollen").textContent = pollen;
+          document.getElementById("aqi-status").textContent = status;
+
+          document.getElementById("aqi-card").style.display = "block";
+        } catch(err) {
+          // Silently fail — air quality is a bonus feature
+          console.log("Air quality fetch failed:", err);
+        }
       }
 
       // Allow pressing Enter to search
