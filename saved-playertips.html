@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Saved Exercises | NEURON</title>
+    <title>Saved Tips | NEURON</title>
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
@@ -85,7 +85,7 @@
 
       .saved-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 20px;
         width: 100%;
         max-width: 960px;
@@ -96,10 +96,10 @@
         border: 1px solid rgba(255,78,0,0.25);
         border-top: 3px solid var(--lava-orange);
         border-radius: 16px;
-        padding: 24px;
+        padding: 28px;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
         animation: fadeUp 0.3s ease;
         transition: 0.3s;
       }
@@ -115,37 +115,42 @@
         to   { opacity: 1; transform: translateY(0); }
       }
 
-      .saved-card-name {
-        font-family: "Orbitron", sans-serif;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: #fff;
-        text-transform: capitalize;
+      .quote-mark {
+        font-size: 3rem;
+        color: var(--lava-orange);
+        opacity: 0.4;
+        line-height: 1;
+        font-family: Georgia, serif;
+        margin-bottom: -10px;
       }
 
-      .badge {
+      .saved-quote-text {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1.05rem;
+        color: #fff;
+        line-height: 1.6;
+        font-style: italic;
+      }
+
+      .saved-quote-author {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.75rem;
+        color: var(--lava-orange);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      .saved-quote-tag {
         display: inline-block;
-        padding: 4px 12px;
+        padding: 3px 10px;
         border-radius: 20px;
         font-family: "Rajdhani", sans-serif;
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-right: 6px;
-        margin-bottom: 4px;
-      }
-
-      .badge-muscle {
-        background: rgba(255,78,0,0.15);
-        border: 1px solid rgba(255,78,0,0.4);
-        color: var(--lava-orange);
-      }
-
-      .badge-category {
-        background: rgba(255,204,0,0.1);
-        border: 1px solid rgba(255,204,0,0.3);
-        color: var(--lava-yellow);
+        background: rgba(255,78,0,0.1);
+        border: 1px solid rgba(255,78,0,0.25);
+        color: #aaa;
       }
 
       .btn-remove {
@@ -180,7 +185,7 @@
         <div class="nav-logo">NEURON</div>
         <ul class="nav-links">
           <li><a href="index.html">HOME</a></li>
-          <li><a href="playertips.html">TRAINING</a></li>
+          <li><a href="playertips.html">TIPS</a></li>
           <li><a href="saved-playertips.html" style="color: var(--lava-orange);">SAVED</a></li>
           <li><a href="login.html">LOGIN</a></li>
         </ul>
@@ -191,21 +196,21 @@
     <section class="saved-section">
 
       <div class="saved-header">
-        <h1 class="section-title">Saved Exercises</h1>
-        <p>Your personal training routine — built for pickleball performance.</p>
+        <h1 class="section-title">Saved Tips</h1>
+        <p>Your personal collection of motivational player tips.</p>
       </div>
 
       <div class="saved-actions">
         <a href="playertips.html" class="btn-lava" style="font-size:0.8rem; padding:12px 28px;">
-          + Browse Exercises
+          + Browse More Tips
         </a>
         <button class="btn-clear-all" onclick="clearAll()">🗑 Clear All</button>
       </div>
 
       <div class="saved-empty" id="empty-state">
-        <span>🏋</span>
-        <p>No saved exercises yet.</p>
-        <a href="playertips.html">Browse exercises to save them</a>
+        <span>💬</span>
+        <p>No saved tips yet.</p>
+        <a href="playertips.html">Browse tips to save them</a>
       </div>
 
       <div class="saved-grid" id="saved-grid"></div>
@@ -213,13 +218,13 @@
     </section>
 
     <footer>
-      <p>NEURON: Lava Series &bull; Saved Training &bull; Powered by <strong>wger Workout Manager API</strong></p>
+      <p>NEURON: Lava Series &bull; Saved Tips &bull; Powered by <strong>Quotable API</strong></p>
     </footer>
 
     <script src="script.js"></script>
     <script>
       function renderSaved() {
-        const saved = JSON.parse(localStorage.getItem("savedExercises") || "[]");
+        const saved = JSON.parse(localStorage.getItem("savedQuotes") || "[]");
         const grid  = document.getElementById("saved-grid");
         const empty = document.getElementById("empty-state");
 
@@ -235,29 +240,28 @@
         saved.forEach((item, index) => {
           grid.innerHTML += `
             <div class="saved-card" id="card-${index}">
-              <div class="saved-card-name">${item.name}</div>
-              <div>
-                <span class="badge badge-muscle">🎯 ${item.muscle}</span>
-                <span class="badge badge-category">📂 ${item.category}</span>
-              </div>
+              <div class="quote-mark">"</div>
+              <div class="saved-quote-text">${item.content}</div>
+              <div class="saved-quote-author">— ${item.author}</div>
+              <span class="saved-quote-tag">${item.tag}</span>
               <button class="btn-remove" onclick="removeItem(${index})">🗑 Remove</button>
             </div>`;
         });
       }
 
       function removeItem(index) {
-        const saved = JSON.parse(localStorage.getItem("savedExercises") || "[]");
-        const removed = saved[index].name;
+        const saved = JSON.parse(localStorage.getItem("savedQuotes") || "[]");
+        const removed = saved[index].author;
         saved.splice(index, 1);
-        localStorage.setItem("savedExercises", JSON.stringify(saved));
-        showToast(`✔ "${removed}" removed.`, "success");
+        localStorage.setItem("savedQuotes", JSON.stringify(saved));
+        showToast(`✔ Tip by "${removed}" removed.`, "success");
         renderSaved();
       }
 
       function clearAll() {
-        if (confirm("Are you sure you want to clear all saved exercises?")) {
-          localStorage.removeItem("savedExercises");
-          showToast("✔ All saved exercises cleared.", "success");
+        if (confirm("Are you sure you want to clear all saved tips?")) {
+          localStorage.removeItem("savedQuotes");
+          showToast("✔ All saved tips cleared.", "success");
           renderSaved();
         }
       }
