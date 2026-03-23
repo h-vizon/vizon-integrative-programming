@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Player Tips | NEURON</title>
     <link rel="stylesheet" href="style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet" />
     <style>
       .tips-section {
         min-height: 100vh;
@@ -17,20 +14,9 @@
         flex-direction: column;
         align-items: center;
       }
+      .tips-header { text-align: center; margin-bottom: 40px; }
+      .tips-header p { font-family: "Rajdhani", sans-serif; color: #ffdcb3; font-size: 1.1rem; margin-top: 8px; }
 
-      .tips-header {
-        text-align: center;
-        margin-bottom: 40px;
-      }
-
-      .tips-header p {
-        font-family: "Rajdhani", sans-serif;
-        color: #ffdcb3;
-        font-size: 1.1rem;
-        margin-top: 8px;
-      }
-
-      /* Tag Filter Buttons */
       .tag-filter {
         display: flex;
         flex-wrap: wrap;
@@ -39,7 +25,6 @@
         max-width: 800px;
         margin-bottom: 40px;
       }
-
       .tag-btn {
         padding: 10px 20px;
         background: rgba(0,0,0,0.5);
@@ -51,23 +36,10 @@
         font-weight: 600;
         cursor: pointer;
         transition: 0.3s;
-        letter-spacing: 0.5px;
       }
+      .tag-btn:hover { border-color: var(--lava-orange); color: #fff; background: rgba(255,78,0,0.1); }
+      .tag-btn.active { background: linear-gradient(90deg, #ff4e00, #ff0040); border-color: transparent; color: #fff; box-shadow: 0 0 15px rgba(255,78,0,0.4); }
 
-      .tag-btn:hover {
-        border-color: var(--lava-orange);
-        color: #fff;
-        background: rgba(255,78,0,0.1);
-      }
-
-      .tag-btn.active {
-        background: linear-gradient(90deg, #ff4e00, #ff0040);
-        border-color: transparent;
-        color: #fff;
-        box-shadow: 0 0 15px rgba(255,78,0,0.4);
-      }
-
-      /* Loading */
       .tips-loading {
         display: none;
         font-family: "Rajdhani", sans-serif;
@@ -78,13 +50,8 @@
         animation: pulse 1.2s ease-in-out infinite;
         margin-bottom: 20px;
       }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50%       { opacity: 0.3; }
-      }
-
-      /* Error */
       .tips-error {
         display: none;
         background: rgba(255,0,64,0.1);
@@ -100,7 +67,6 @@
         margin-bottom: 20px;
       }
 
-      /* Results label */
       .results-label {
         display: none;
         font-family: "Orbitron", sans-serif;
@@ -112,7 +78,6 @@
         text-align: center;
       }
 
-      /* Quote Grid */
       .quote-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -129,65 +94,19 @@
         padding: 28px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 14px;
         animation: fadeUp 0.3s ease;
         transition: 0.3s;
       }
+      .quote-card:hover { border-color: var(--lava-orange); box-shadow: 0 0 20px rgba(255,78,0,0.2); transform: translateY(-3px); }
+      @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-      .quote-card:hover {
-        border-color: var(--lava-orange);
-        box-shadow: 0 0 20px rgba(255,78,0,0.2);
-        transform: translateY(-3px);
-      }
+      .quote-mark { font-size: 3rem; color: var(--lava-orange); opacity: 0.4; line-height: 1; font-family: Georgia, serif; margin-bottom: -10px; }
+      .quote-text { font-family: "Rajdhani", sans-serif; font-size: 1.05rem; color: #fff; line-height: 1.6; font-style: italic; }
+      .quote-author { font-family: "Orbitron", sans-serif; font-size: 0.75rem; color: var(--lava-orange); letter-spacing: 1.5px; text-transform: uppercase; }
 
-      @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(15px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
-
-      .quote-mark {
-        font-size: 3rem;
-        color: var(--lava-orange);
-        opacity: 0.4;
-        line-height: 1;
-        font-family: Georgia, serif;
-        margin-bottom: -10px;
-      }
-
-      .quote-text {
-        font-family: "Rajdhani", sans-serif;
-        font-size: 1.05rem;
-        color: #fff;
-        line-height: 1.6;
-        font-style: italic;
-      }
-
-      .quote-author {
-        font-family: "Orbitron", sans-serif;
-        font-size: 0.75rem;
-        color: var(--lava-orange);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-      }
-
-      .quote-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-
-      .quote-tag {
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-family: "Rajdhani", sans-serif;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        background: rgba(255,78,0,0.1);
-        border: 1px solid rgba(255,78,0,0.25);
-        color: #aaa;
-      }
+      .quote-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+      .quote-tag { padding: 3px 10px; border-radius: 20px; font-family: "Rajdhani", sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; background: rgba(255,78,0,0.1); border: 1px solid rgba(255,78,0,0.25); color: #aaa; }
 
       .btn-save-quote {
         display: flex;
@@ -207,44 +126,18 @@
         transition: 0.3s;
         margin-top: auto;
       }
+      .btn-save-quote:hover { background: rgba(255,78,0,0.1); box-shadow: 0 0 12px rgba(255,78,0,0.2); }
+      .btn-save-quote.saved { border-color: #00ff88; color: #00ff88; background: rgba(0,255,136,0.05); pointer-events: none; }
 
-      .btn-save-quote:hover {
-        background: rgba(255,78,0,0.1);
-        box-shadow: 0 0 12px rgba(255,78,0,0.2);
-      }
-
-      .btn-save-quote.saved {
-        border-color: #00ff88;
-        color: #00ff88;
-        background: rgba(0,255,136,0.05);
-        pointer-events: none;
-      }
-
-      .view-saved-link {
-        margin-top: 30px;
-        font-family: "Rajdhani", sans-serif;
-        font-size: 1rem;
-        color: #888;
-        text-align: center;
-        display: none;
-      }
-
-      .view-saved-link a {
-        color: var(--lava-orange);
-        text-decoration: none;
-        font-weight: 600;
-      }
-
+      .view-saved-link { margin-top: 30px; font-family: "Rajdhani", sans-serif; font-size: 1rem; color: #888; text-align: center; display: none; }
+      .view-saved-link a { color: var(--lava-orange); text-decoration: none; font-weight: 600; }
       .view-saved-link a:hover { color: var(--lava-yellow); }
 
-      @media (max-width: 600px) {
-        .quote-grid { grid-template-columns: 1fr; }
-      }
+      @media (max-width: 600px) { .quote-grid { grid-template-columns: 1fr; } }
     </style>
   </head>
 
   <body>
-    <!-- NAVIGATION -->
     <nav class="main-nav">
       <div class="container nav-wrapper">
         <div class="nav-logo">NEURON</div>
@@ -258,41 +151,28 @@
       </div>
     </nav>
 
-    <!-- TIPS SECTION -->
     <section class="tips-section">
-
       <div class="tips-header">
         <h1 class="section-title">Player Tips</h1>
-        <p>Motivational quotes to fuel your pickleball performance — powered by real athletes.</p>
+        <p>Motivational quotes to fuel your pickleball performance.</p>
       </div>
 
-      <!-- Tag Filter Buttons -->
       <div class="tag-filter">
-        <button class="tag-btn" onclick="loadQuotes('sports',      this)">🏆 Sports</button>
-        <button class="tag-btn" onclick="loadQuotes('success',     this)">🔥 Success</button>
-        <button class="tag-btn" onclick="loadQuotes('motivational',this)">💪 Motivation</button>
-        <button class="tag-btn" onclick="loadQuotes('competition', this)">⚡ Competition</button>
-        <button class="tag-btn" onclick="loadQuotes('teamwork',    this)">🤝 Teamwork</button>
-        <button class="tag-btn" onclick="loadQuotes('perseverance',this)">🎯 Perseverance</button>
+        <button class="tag-btn" onclick="loadQuotes('sports', this)">🏆 Sports</button>
+        <button class="tag-btn" onclick="loadQuotes('success', this)">🔥 Success</button>
+        <button class="tag-btn" onclick="loadQuotes('motivational', this)">💪 Motivation</button>
+        <button class="tag-btn" onclick="loadQuotes('wisdom', this)">🎯 Wisdom</button>
+        <button class="tag-btn" onclick="loadQuotes('teamwork', this)">🤝 Teamwork</button>
+        <button class="tag-btn" onclick="loadQuotes('perseverance', this)">⚡ Perseverance</button>
       </div>
 
-      <!-- Loading -->
       <div class="tips-loading" id="t-loading">⚡ Loading player tips...</div>
-
-      <!-- Error -->
       <div class="tips-error" id="t-error"></div>
-
-      <!-- Results Label -->
       <div class="results-label" id="results-label"></div>
-
-      <!-- Quote Grid -->
       <div class="quote-grid" id="quote-grid"></div>
-
-      <!-- View Saved -->
       <div class="view-saved-link" id="view-saved-link">
         <a href="saved-playertips.html">📋 View Saved Tips →</a>
       </div>
-
     </section>
 
     <footer>
@@ -308,87 +188,78 @@
         const resLabel = document.getElementById("results-label");
         const viewLink = document.getElementById("view-saved-link");
 
-        // Set active button
         document.querySelectorAll(".tag-btn").forEach(b => b.classList.remove("active"));
         btnEl.classList.add("active");
 
-        grid.innerHTML        = "";
-        errBox.style.display  = "none";
+        grid.innerHTML         = "";
+        errBox.style.display   = "none";
         resLabel.style.display = "none";
         viewLink.style.display = "none";
         loading.style.display  = "block";
 
         try {
-          // Quotable API — free, no key needed
-          const res  = await fetch(`https://api.quotable.io/quotes?tags=${tag}&limit=9`);
-          if (!res.ok) throw new Error("Failed to fetch");
+          const res  = await fetch("https://api.quotable.io/quotes?tags=" + tag + "&limit=9");
+          if (!res.ok) throw new Error("Failed");
           const data = await res.json();
 
           loading.style.display = "none";
 
           if (!data.results || data.results.length === 0) {
-            errBox.textContent   = "⚠ No quotes found for this category.";
+            errBox.textContent   = "No quotes found for this category.";
             errBox.style.display = "block";
             return;
           }
 
-          resLabel.textContent   = `${tag.charAt(0).toUpperCase() + tag.slice(1)} Tips for Pickleball Players`;
+          resLabel.textContent   = tag.charAt(0).toUpperCase() + tag.slice(1) + " Tips for Pickleball Players";
           resLabel.style.display = "block";
 
           const savedQuotes = JSON.parse(localStorage.getItem("savedQuotes") || "[]");
 
-          data.results.forEach(q => {
-            const isSaved = savedQuotes.some(s => s.id === q._id);
-            const tags    = q.tags.map(t => `<span class="quote-tag">${t}</span>`).join("");
+          data.results.forEach(function(q) {
+            var isSaved = savedQuotes.some(function(s) { return s.id === q._id; });
+            var tags    = q.tags.map(function(t) { return '<span class="quote-tag">' + t + '</span>'; }).join("");
+            var content = q.content.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+            var author  = q.author.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
-            grid.innerHTML += `
-              <div class="quote-card">
-                <div class="quote-mark">"</div>
-                <div class="quote-text">${q.content}</div>
-                <div class="quote-author">— ${q.author}</div>
-                <div class="quote-tags">${tags}</div>
-                <button
-                  class="btn-save-quote ${isSaved ? 'saved' : ''}"
-                  id="save-btn-${q._id}"
-                  onclick="saveQuote('${q._id}', \`${q.content.replace(/`/g,"'")}\`, '${q.author.replace(/'/g,"\\'")}', '${tag}')"
-                >
-                  ${isSaved ? "✔ SAVED" : "💾 SAVE TIP"}
-                </button>
-              </div>`;
+            grid.innerHTML += '<div class="quote-card">' +
+              '<div class="quote-mark">"</div>' +
+              '<div class="quote-text">' + q.content + '</div>' +
+              '<div class="quote-author">— ' + q.author + '</div>' +
+              '<div class="quote-tags">' + tags + '</div>' +
+              '<button class="btn-save-quote ' + (isSaved ? 'saved' : '') + '" id="save-btn-' + q._id + '" ' +
+              'onclick="saveQuote(\'' + q._id + '\', \'' + content + '\', \'' + author + '\', \'' + tag + '\')">' +
+              (isSaved ? "✔ SAVED" : "💾 SAVE TIP") +
+              '</button></div>';
           });
 
           viewLink.style.display = "block";
 
-        } catch (err) {
+        } catch(err) {
           loading.style.display = "none";
-          errBox.textContent    = "⚠ Failed to load tips. Please try again.";
+          errBox.textContent    = "Failed to load tips. Please try again.";
           errBox.style.display  = "block";
         }
       }
 
       function saveQuote(id, content, author, tag) {
-        const saved = JSON.parse(localStorage.getItem("savedQuotes") || "[]");
+        var saved = JSON.parse(localStorage.getItem("savedQuotes") || "[]");
 
-        if (saved.some(s => s.id === id)) {
-          showToast("⚠ This tip is already saved!", "error");
+        if (saved.some(function(s) { return s.id === id; })) {
+          showToast("This tip is already saved!", "error");
           return;
         }
 
-        saved.push({ id, content, author, tag });
+        saved.push({ id: id, content: content, author: author, tag: tag });
         localStorage.setItem("savedQuotes", JSON.stringify(saved));
 
-        const btn = document.getElementById("save-btn-" + id);
-        if (btn) {
-          btn.textContent = "✔ SAVED";
-          btn.classList.add("saved");
-        }
+        var btn = document.getElementById("save-btn-" + id);
+        if (btn) { btn.textContent = "✔ SAVED"; btn.classList.add("saved"); }
 
-        showToast(`✔ Tip by ${author} saved!`, "success");
+        showToast("Tip by " + author + " saved!", "success");
       }
 
-      // Load Sports quotes by default
-      window.addEventListener("DOMContentLoaded", () => {
-        const firstBtn = document.querySelector(".tag-btn");
+      window.addEventListener("DOMContentLoaded", function() {
+        var firstBtn = document.querySelector(".tag-btn");
         loadQuotes("sports", firstBtn);
       });
     </script>
