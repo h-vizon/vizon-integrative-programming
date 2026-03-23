@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Player Nations | NEURON</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .country-section {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .country-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .country-header p {
+        font-family: "Rajdhani", sans-serif;
+        color: #ffdcb3;
+        font-size: 1.1rem;
+        margin-top: 8px;
+      }
+
+      /* Search Bar */
+      .country-search {
+        display: flex;
+        gap: 12px;
+        width: 100%;
+        max-width: 560px;
+        margin-bottom: 40px;
+      }
+
+      .country-search input {
+        flex: 1;
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 78, 0, 0.4);
+        border-radius: 30px;
+        color: #fff;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1.05rem;
+        outline: none;
+        transition: 0.3s;
+      }
+
+      .country-search input::placeholder { color: #888; }
+
+      .country-search input:focus {
+        border-color: var(--lava-orange);
+        box-shadow: 0 0 20px rgba(255, 78, 0, 0.3);
+      }
+
+      .country-search button {
+        padding: 15px 28px;
+        background: linear-gradient(90deg, #ff4e00, #ff0040);
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(255, 78, 0, 0.4);
+        transition: 0.3s;
+        white-space: nowrap;
+      }
+
+      .country-search button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 35px var(--lava-orange);
+      }
+
+      /* Loading */
+      .country-loading {
+        display: none;
+        font-family: "Rajdhani", sans-serif;
+        color: var(--lava-orange);
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: pulse 1.2s ease-in-out infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.3; }
+      }
+
+      /* Error */
+      .country-error {
+        display: none;
+        background: rgba(255, 0, 64, 0.1);
+        border: 1px solid #ff0040;
+        border-radius: 12px;
+        padding: 16px 28px;
+        font-family: "Rajdhani", sans-serif;
+        color: #ff4466;
+        font-size: 1rem;
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      /* Country Card */
+      .country-card {
+        display: none;
+        width: 100%;
+        max-width: 700px;
+        background: rgba(0, 0, 0, 0.65);
+        border: 1px solid rgba(255, 78, 0, 0.3);
+        border-top: 3px solid var(--lava-orange);
+        border-radius: 20px;
+        padding: 35px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 40px rgba(255, 78, 0, 0.15);
+        animation: fadeUp 0.4s ease;
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Flag + Name Row */
+      .country-top {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 28px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid rgba(255, 78, 0, 0.15);
+      }
+
+      .country-flag {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid rgba(255, 78, 0, 0.4);
+        box-shadow: 0 0 20px rgba(255, 78, 0, 0.2);
+        flex-shrink: 0;
+      }
+
+      .country-name {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 6px;
+      }
+
+      .country-official {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.9rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Stats Grid */
+      .country-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .country-stat {
+        background: rgba(255, 78, 0, 0.06);
+        border: 1px solid rgba(255, 78, 0, 0.15);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        transition: 0.3s;
+      }
+
+      .country-stat:hover {
+        border-color: var(--lava-orange);
+        box-shadow: 0 0 15px rgba(255, 78, 0, 0.2);
+      }
+
+      .cstat-icon { font-size: 1.5rem; margin-bottom: 6px; }
+
+      .cstat-val {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 3px;
+        word-break: break-word;
+      }
+
+      .cstat-lbl {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.78rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Languages & Currencies */
+      .country-extra {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .country-extra-box {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 78, 0, 0.1);
+        border-radius: 12px;
+        padding: 16px;
+      }
+
+      .extra-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.72rem;
+        color: var(--lava-orange);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .extra-val {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.95rem;
+        color: #ccc;
+      }
+
+      /* Save + View */
+      .btn-save-country {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        margin-top: 8px;
+        padding: 14px;
+        background: transparent;
+        border: 1px solid rgba(255, 78, 0, 0.5);
+        border-radius: 12px;
+        color: var(--lava-orange);
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-save-country:hover {
+        background: rgba(255, 78, 0, 0.12);
+        box-shadow: 0 0 20px rgba(255, 78, 0, 0.3);
+      }
+
+      .btn-save-country.saved {
+        border-color: #00ff88;
+        color: #00ff88;
+        background: rgba(0, 255, 136, 0.06);
+        pointer-events: none;
+      }
+
+      .view-saved-link {
+        margin-top: 14px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.95rem;
+        color: #888;
+        text-align: center;
+      }
+
+      .view-saved-link a {
+        color: var(--lava-orange);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .view-saved-link a:hover { color: var(--lava-yellow); }
+
+      @media (max-width: 600px) {
+        .country-stats  { grid-template-columns: repeat(2, 1fr); }
+        .country-extra  { grid-template-columns: 1fr; }
+        .country-name   { font-size: 1.3rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+        <ul class="nav-links">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="weather.html">WEATHER</a></li>
+          <li><a href="countries.html" style="color: var(--lava-orange);">NATIONS</a></li>
+          <li><a href="login.html">LOGIN</a></li>
+        </ul>
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <!-- COUNTRY SECTION -->
+    <section class="country-section">
+
+      <div class="country-header">
+        <h1 class="section-title">Player Nations</h1>
+        <p>Explore countries where NEURON athletes compete worldwide.</p>
+      </div>
+
+      <!-- Search -->
+      <div class="country-search">
+        <input
+          type="text"
+          id="country-input"
+          placeholder="Enter country name (e.g. Philippines, Japan...)"
+          autocomplete="off"
+        />
+        <button onclick="getCountry()">SEARCH</button>
+      </div>
+
+      <!-- Loading -->
+      <div class="country-loading" id="c-loading">⚡ Scanning nations...</div>
+
+      <!-- Error -->
+      <div class="country-error" id="c-error"></div>
+
+      <!-- Country Card -->
+      <div class="country-card" id="country-card">
+
+        <div class="country-top">
+          <img id="c-flag" class="country-flag" src="" alt="Flag" />
+          <div>
+            <div class="country-name"  id="c-name">—</div>
+            <div class="country-official" id="c-official">—</div>
+          </div>
+        </div>
+
+        <div class="country-stats">
+          <div class="country-stat">
+            <div class="cstat-icon">🌍</div>
+            <div class="cstat-val" id="c-region">—</div>
+            <div class="cstat-lbl">Region</div>
+          </div>
+          <div class="country-stat">
+            <div class="cstat-icon">🏛</div>
+            <div class="cstat-val" id="c-capital">—</div>
+            <div class="cstat-lbl">Capital</div>
+          </div>
+          <div class="country-stat">
+            <div class="cstat-icon">👥</div>
+            <div class="cstat-val" id="c-pop">—</div>
+            <div class="cstat-lbl">Population</div>
+          </div>
+          <div class="country-stat">
+            <div class="cstat-icon">📐</div>
+            <div class="cstat-val" id="c-area">—</div>
+            <div class="cstat-lbl">Area (km²)</div>
+          </div>
+          <div class="country-stat">
+            <div class="cstat-icon">🗺</div>
+            <div class="cstat-val" id="c-subregion">—</div>
+            <div class="cstat-lbl">Subregion</div>
+          </div>
+          <div class="country-stat">
+            <div class="cstat-icon">🚗</div>
+            <div class="cstat-val" id="c-drive">—</div>
+            <div class="cstat-lbl">Drives On</div>
+          </div>
+        </div>
+
+        <div class="country-extra">
+          <div class="country-extra-box">
+            <div class="extra-title">🗣 Languages</div>
+            <div class="extra-val" id="c-languages">—</div>
+          </div>
+          <div class="country-extra-box">
+            <div class="extra-title">💰 Currencies</div>
+            <div class="extra-val" id="c-currencies">—</div>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <button class="btn-save-country" id="save-country-btn" onclick="saveCountry()">
+          💾 SAVE NATION
+        </button>
+        <div class="view-saved-link">
+          <a href="saved-countries.html">📋 View Saved Nations →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <footer>
+      <p>NEURON: Lava Series &bull; Player Nations &bull; Powered by <strong>REST Countries API</strong></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // Format large numbers
+      function formatNum(n) {
+        return n ? n.toLocaleString() : "—";
+      }
+
+      // ── Fetch Country ──
+      async function getCountry() {
+        const query   = document.getElementById("country-input").value.trim();
+        const loading = document.getElementById("c-loading");
+        const errBox  = document.getElementById("c-error");
+        const card    = document.getElementById("country-card");
+
+        errBox.style.display = "none";
+        card.style.display   = "none";
+
+        if (!query) {
+          errBox.textContent   = "⚠ Please enter a country name.";
+          errBox.style.display = "block";
+          return;
+        }
+
+        loading.style.display = "block";
+
+        try {
+          const res  = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(query)}?fullText=false`);
+          if (!res.ok) throw new Error("Country not found");
+          const data = await res.json();
+          const c    = data[0];
+
+          // Languages
+          const langs = c.languages ? Object.values(c.languages).join(", ") : "—";
+
+          // Currencies
+          const currencies = c.currencies
+            ? Object.values(c.currencies).map(cur => `${cur.name} (${cur.symbol || ""})`).join(", ")
+            : "—";
+
+          // Populate
+          document.getElementById("c-flag").src         = c.flags?.png || "";
+          document.getElementById("c-flag").alt         = `${c.name.common} flag`;
+          document.getElementById("c-name").textContent     = c.name.common;
+          document.getElementById("c-official").textContent = c.name.official;
+          document.getElementById("c-region").textContent   = c.region || "—";
+          document.getElementById("c-capital").textContent  = c.capital?.[0] || "—";
+          document.getElementById("c-pop").textContent      = formatNum(c.population);
+          document.getElementById("c-area").textContent     = formatNum(c.area);
+          document.getElementById("c-subregion").textContent= c.subregion || "—";
+          document.getElementById("c-drive").textContent    = c.car?.side === "left" ? "Left" : "Right";
+          document.getElementById("c-languages").textContent = langs;
+          document.getElementById("c-currencies").textContent = currencies;
+
+          // Reset save button
+          const btn = document.getElementById("save-country-btn");
+          btn.textContent = "💾 SAVE NATION";
+          btn.classList.remove("saved");
+
+          loading.style.display = "none";
+          card.style.display    = "block";
+
+        } catch (err) {
+          loading.style.display = "none";
+          errBox.textContent    = "⚠ Country not found. Please check the spelling and try again.";
+          errBox.style.display  = "block";
+        }
+      }
+
+      // ── Save Country to localStorage ──
+      function saveCountry() {
+        const name       = document.getElementById("c-name").textContent;
+        const capital    = document.getElementById("c-capital").textContent;
+        const region     = document.getElementById("c-region").textContent;
+        const population = document.getElementById("c-pop").textContent;
+        const flag       = document.getElementById("c-flag").src;
+        const languages  = document.getElementById("c-languages").textContent;
+
+        if (!name || name === "—") return;
+
+        const saved = JSON.parse(localStorage.getItem("savedCountries") || "[]");
+
+        // Prevent duplicates
+        if (saved.some(item => item.name === name)) {
+          showToast(`⚠ ${name} is already saved!`, "error");
+          return;
+        }
+
+        saved.push({ name, capital, region, population, flag, languages });
+        localStorage.setItem("savedCountries", JSON.stringify(saved));
+
+        const btn = document.getElementById("save-country-btn");
+        btn.textContent = "✔ SAVED!";
+        btn.classList.add("saved");
+
+        showToast(`✔ ${name} saved successfully!`, "success");
+      }
+
+      // Enter key support
+      document.getElementById("country-input").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") getCountry();
+      });
+    </script>
+  </body>
+</html>
