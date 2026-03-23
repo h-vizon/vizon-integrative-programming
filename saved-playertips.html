@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saved Exercises | NEURON</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .saved-section {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .saved-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .saved-header p {
+        font-family: "Rajdhani", sans-serif;
+        color: #ffdcb3;
+        font-size: 1.1rem;
+        margin-top: 8px;
+      }
+
+      .saved-actions {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .btn-clear-all {
+        background: transparent;
+        border: 1px solid rgba(255,0,64,0.4);
+        color: #ff4466;
+        padding: 10px 24px;
+        border-radius: 30px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-clear-all:hover {
+        background: rgba(255,0,64,0.1);
+        box-shadow: 0 0 15px rgba(255,0,64,0.3);
+      }
+
+      .saved-empty {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 40px;
+        font-family: "Rajdhani", sans-serif;
+        color: #555;
+        font-size: 1.1rem;
+        text-align: center;
+      }
+
+      .saved-empty span { font-size: 3rem; }
+
+      .saved-empty a {
+        color: var(--lava-orange);
+        text-decoration: none;
+        font-weight: 600;
+        border: 1px solid rgba(255,78,0,0.4);
+        padding: 10px 24px;
+        border-radius: 30px;
+        transition: 0.3s;
+      }
+
+      .saved-empty a:hover { background: rgba(255,78,0,0.1); }
+
+      .saved-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 960px;
+      }
+
+      .saved-card {
+        background: rgba(0,0,0,0.65);
+        border: 1px solid rgba(255,78,0,0.25);
+        border-top: 3px solid var(--lava-orange);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        animation: fadeUp 0.3s ease;
+        transition: 0.3s;
+      }
+
+      .saved-card:hover {
+        border-color: var(--lava-orange);
+        box-shadow: 0 0 20px rgba(255,78,0,0.2);
+        transform: translateY(-3px);
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .saved-card-name {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
+        text-transform: capitalize;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-right: 6px;
+        margin-bottom: 4px;
+      }
+
+      .badge-muscle {
+        background: rgba(255,78,0,0.15);
+        border: 1px solid rgba(255,78,0,0.4);
+        color: var(--lava-orange);
+      }
+
+      .badge-category {
+        background: rgba(255,204,0,0.1);
+        border: 1px solid rgba(255,204,0,0.3);
+        color: var(--lava-yellow);
+      }
+
+      .btn-remove {
+        background: transparent;
+        border: 1px solid rgba(255,0,64,0.4);
+        color: #ff4466;
+        padding: 7px 16px;
+        border-radius: 20px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        align-self: flex-start;
+        margin-top: auto;
+      }
+
+      .btn-remove:hover {
+        background: rgba(255,0,64,0.15);
+        box-shadow: 0 0 12px rgba(255,0,64,0.3);
+      }
+
+      @media (max-width: 600px) {
+        .saved-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+        <ul class="nav-links">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="playertips.html">TRAINING</a></li>
+          <li><a href="saved-playertips.html" style="color: var(--lava-orange);">SAVED</a></li>
+          <li><a href="login.html">LOGIN</a></li>
+        </ul>
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <section class="saved-section">
+
+      <div class="saved-header">
+        <h1 class="section-title">Saved Exercises</h1>
+        <p>Your personal training routine — built for pickleball performance.</p>
+      </div>
+
+      <div class="saved-actions">
+        <a href="playertips.html" class="btn-lava" style="font-size:0.8rem; padding:12px 28px;">
+          + Browse Exercises
+        </a>
+        <button class="btn-clear-all" onclick="clearAll()">🗑 Clear All</button>
+      </div>
+
+      <div class="saved-empty" id="empty-state">
+        <span>🏋</span>
+        <p>No saved exercises yet.</p>
+        <a href="playertips.html">Browse exercises to save them</a>
+      </div>
+
+      <div class="saved-grid" id="saved-grid"></div>
+
+    </section>
+
+    <footer>
+      <p>NEURON: Lava Series &bull; Saved Training &bull; Powered by <strong>wger Workout Manager API</strong></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      function renderSaved() {
+        const saved = JSON.parse(localStorage.getItem("savedExercises") || "[]");
+        const grid  = document.getElementById("saved-grid");
+        const empty = document.getElementById("empty-state");
+
+        grid.innerHTML = "";
+
+        if (saved.length === 0) {
+          empty.style.display = "flex";
+          return;
+        }
+
+        empty.style.display = "none";
+
+        saved.forEach((item, index) => {
+          grid.innerHTML += `
+            <div class="saved-card" id="card-${index}">
+              <div class="saved-card-name">${item.name}</div>
+              <div>
+                <span class="badge badge-muscle">🎯 ${item.muscle}</span>
+                <span class="badge badge-category">📂 ${item.category}</span>
+              </div>
+              <button class="btn-remove" onclick="removeItem(${index})">🗑 Remove</button>
+            </div>`;
+        });
+      }
+
+      function removeItem(index) {
+        const saved = JSON.parse(localStorage.getItem("savedExercises") || "[]");
+        const removed = saved[index].name;
+        saved.splice(index, 1);
+        localStorage.setItem("savedExercises", JSON.stringify(saved));
+        showToast(`✔ "${removed}" removed.`, "success");
+        renderSaved();
+      }
+
+      function clearAll() {
+        if (confirm("Are you sure you want to clear all saved exercises?")) {
+          localStorage.removeItem("savedExercises");
+          showToast("✔ All saved exercises cleared.", "success");
+          renderSaved();
+        }
+      }
+
+      renderSaved();
+    </script>
+  </body>
+</html>

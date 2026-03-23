@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Player Training | NEURON</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .training-section {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .training-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .training-header p {
+        font-family: "Rajdhani", sans-serif;
+        color: #ffdcb3;
+        font-size: 1.1rem;
+        margin-top: 8px;
+      }
+
+      /* Muscle Group Buttons */
+      .muscle-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        max-width: 800px;
+        margin-bottom: 40px;
+      }
+
+      .muscle-btn {
+        padding: 10px 20px;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,78,0,0.3);
+        border-radius: 30px;
+        color: #aaa;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        letter-spacing: 0.5px;
+      }
+
+      .muscle-btn:hover {
+        border-color: var(--lava-orange);
+        color: #fff;
+        background: rgba(255,78,0,0.1);
+      }
+
+      .muscle-btn.active {
+        background: linear-gradient(90deg, #ff4e00, #ff0040);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 0 15px rgba(255,78,0,0.4);
+      }
+
+      /* Loading */
+      .training-loading {
+        display: none;
+        font-family: "Rajdhani", sans-serif;
+        color: var(--lava-orange);
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: pulse 1.2s ease-in-out infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.3; }
+      }
+
+      /* Error */
+      .training-error {
+        display: none;
+        background: rgba(255,0,64,0.1);
+        border: 1px solid #ff0040;
+        border-radius: 12px;
+        padding: 16px 28px;
+        font-family: "Rajdhani", sans-serif;
+        color: #ff4466;
+        font-size: 1rem;
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      /* Results Label */
+      .results-label {
+        display: none;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.8rem;
+        color: var(--lava-orange);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      /* Exercise Grid */
+      .exercise-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 960px;
+      }
+
+      .exercise-card {
+        background: rgba(0,0,0,0.65);
+        border: 1px solid rgba(255,78,0,0.2);
+        border-top: 3px solid var(--lava-orange);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        animation: fadeUp 0.3s ease;
+        transition: 0.3s;
+      }
+
+      .exercise-card:hover {
+        border-color: var(--lava-orange);
+        box-shadow: 0 0 20px rgba(255,78,0,0.2);
+        transform: translateY(-3px);
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .exercise-name {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
+        text-transform: capitalize;
+      }
+
+      .exercise-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge-muscle {
+        background: rgba(255,78,0,0.15);
+        border: 1px solid rgba(255,78,0,0.4);
+        color: var(--lava-orange);
+      }
+
+      .badge-equipment {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: #888;
+      }
+
+      .badge-category {
+        background: rgba(255,204,0,0.1);
+        border: 1px solid rgba(255,204,0,0.3);
+        color: var(--lava-yellow);
+      }
+
+      .exercise-desc {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.9rem;
+        color: #aaa;
+        line-height: 1.5;
+        /* Strip HTML tags from API */
+      }
+
+      .btn-save-ex {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px;
+        background: transparent;
+        border: 1px solid rgba(255,78,0,0.4);
+        border-radius: 10px;
+        color: var(--lava-orange);
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: auto;
+      }
+
+      .btn-save-ex:hover {
+        background: rgba(255,78,0,0.1);
+        box-shadow: 0 0 12px rgba(255,78,0,0.2);
+      }
+
+      .btn-save-ex.saved {
+        border-color: #00ff88;
+        color: #00ff88;
+        background: rgba(0,255,136,0.05);
+        pointer-events: none;
+      }
+
+      .view-saved-link {
+        margin-top: 30px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1rem;
+        color: #888;
+        text-align: center;
+      }
+
+      .view-saved-link a {
+        color: var(--lava-orange);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .view-saved-link a:hover { color: var(--lava-yellow); }
+
+      @media (max-width: 600px) {
+        .exercise-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">NEURON</div>
+        <ul class="nav-links">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="weather.html">WEATHER</a></li>
+          <li><a href="playertips.html" style="color: var(--lava-orange);">TRAINING</a></li>
+          <li><a href="login.html">LOGIN</a></li>
+        </ul>
+        <div class="nav-spacer"></div>
+      </div>
+    </nav>
+
+    <!-- TRAINING SECTION -->
+    <section class="training-section">
+
+      <div class="training-header">
+        <h1 class="section-title">Player Training</h1>
+        <p>Choose a muscle group to find exercises that boost your pickleball performance.</p>
+      </div>
+
+      <!-- Muscle Group Filter Buttons -->
+      <div class="muscle-filter" id="muscle-filter">
+        <button class="muscle-btn" onclick="loadExercises(1,  'Legs',       this)">🦵 Legs</button>
+        <button class="muscle-btn" onclick="loadExercises(13, 'Arms',       this)">💪 Arms</button>
+        <button class="muscle-btn" onclick="loadExercises(10, 'Chest',      this)">🫁 Chest</button>
+        <button class="muscle-btn" onclick="loadExercises(12, 'Back',       this)">🔙 Back</button>
+        <button class="muscle-btn" onclick="loadExercises(14, 'Shoulders',  this)">🏋 Shoulders</button>
+        <button class="muscle-btn" onclick="loadExercises(11, 'Core',       this)">🔥 Core</button>
+      </div>
+
+      <!-- Loading -->
+      <div class="training-loading" id="t-loading">⚡ Loading exercises...</div>
+
+      <!-- Error -->
+      <div class="training-error" id="t-error"></div>
+
+      <!-- Results Label -->
+      <div class="results-label" id="results-label"></div>
+
+      <!-- Exercise Grid -->
+      <div class="exercise-grid" id="exercise-grid"></div>
+
+      <!-- View Saved -->
+      <div class="view-saved-link" id="view-saved-link" style="display:none;">
+        <a href="saved-playertips.html">📋 View Saved Exercises →</a>
+      </div>
+
+    </section>
+
+    <footer>
+      <p>NEURON: Lava Series &bull; Player Training &bull; Powered by <strong>wger Workout Manager API</strong></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // Strip HTML tags from exercise descriptions
+      function stripHTML(html) {
+        const tmp = document.createElement("div");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+      }
+
+      // Save exercise to localStorage
+      function saveExercise(id, name, muscle, equipment, category) {
+        const saved = JSON.parse(localStorage.getItem("savedExercises") || "[]");
+
+        if (saved.some(item => item.id === id)) {
+          showToast("⚠ Exercise already saved!", "error");
+          return;
+        }
+
+        saved.push({ id, name, muscle, equipment, category });
+        localStorage.setItem("savedExercises", JSON.stringify(saved));
+
+        // Update button
+        const btn = document.getElementById("save-btn-" + id);
+        if (btn) {
+          btn.textContent = "✔ SAVED";
+          btn.classList.add("saved");
+        }
+
+        showToast(`✔ "${name}" saved!`, "success");
+      }
+
+      // Load exercises by category ID
+      async function loadExercises(categoryId, label, btnEl) {
+        const loading  = document.getElementById("t-loading");
+        const errBox   = document.getElementById("t-error");
+        const grid     = document.getElementById("exercise-grid");
+        const resLabel = document.getElementById("results-label");
+        const viewLink = document.getElementById("view-saved-link");
+
+        // Set active button
+        document.querySelectorAll(".muscle-btn").forEach(b => b.classList.remove("active"));
+        btnEl.classList.add("active");
+
+        grid.innerHTML       = "";
+        errBox.style.display = "none";
+        resLabel.style.display = "none";
+        viewLink.style.display = "none";
+        loading.style.display  = "block";
+
+        try {
+          // wger API — get exercises by category, English language only
+          const res  = await fetch(
+            `https://wger.de/api/v2/exercise/?format=json&language=2&category=${categoryId}&limit=9`
+          );
+          const data = await res.json();
+
+          // Get category/muscle info
+          const catRes  = await fetch(`https://wger.de/api/v2/exercisecategory/${categoryId}/?format=json`);
+          const catData = await catRes.json();
+          const catName = catData.name || label;
+
+          loading.style.display = "none";
+
+          if (!data.results || data.results.length === 0) {
+            errBox.textContent   = "⚠ No exercises found for this muscle group.";
+            errBox.style.display = "block";
+            return;
+          }
+
+          resLabel.textContent   = `${label} Exercises for Pickleball Players`;
+          resLabel.style.display = "block";
+
+          const savedExercises = JSON.parse(localStorage.getItem("savedExercises") || "[]");
+
+          data.results.forEach(ex => {
+            const name     = ex.name || "Unnamed Exercise";
+            const desc     = ex.description ? stripHTML(ex.description).substring(0, 160) + "..." : "No description available.";
+            const isSaved  = savedExercises.some(s => s.id === ex.id);
+
+            grid.innerHTML += `
+              <div class="exercise-card">
+                <div class="exercise-name">${name}</div>
+                <div class="exercise-badges">
+                  <span class="badge badge-muscle">🎯 ${label}</span>
+                  <span class="badge badge-category">📂 ${catName}</span>
+                </div>
+                <div class="exercise-desc">${desc}</div>
+                <button
+                  class="btn-save-ex ${isSaved ? 'saved' : ''}"
+                  id="save-btn-${ex.id}"
+                  onclick="saveExercise(${ex.id}, '${name.replace(/'/g,"\\'")}', '${label}', 'Bodyweight', '${catName}')"
+                >
+                  ${isSaved ? "✔ SAVED" : "💾 SAVE EXERCISE"}
+                </button>
+              </div>`;
+          });
+
+          viewLink.style.display = "block";
+
+        } catch (err) {
+          loading.style.display = "none";
+          errBox.textContent    = "⚠ Failed to load exercises. Please try again.";
+          errBox.style.display  = "block";
+        }
+      }
+
+      // Load Arms by default on page open
+      window.addEventListener("DOMContentLoaded", () => {
+        const firstBtn = document.querySelector(".muscle-btn");
+        loadExercises(1, "Legs", firstBtn);
+      });
+    </script>
+  </body>
+</html>
